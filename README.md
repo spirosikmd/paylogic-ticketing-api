@@ -1,6 +1,8 @@
 paylogic-ticketing-api
 ================
 
+It includes polymer elements that encapsulate the functionality provided by the Paylogic Ticketing API.
+
 ## Getting Started
 
 Import the template
@@ -31,4 +33,4 @@ document.addEventListener('polymer-ready', function() {
 });
 ```
 
-For more info check the [demo](https://github.com/spirosikmd/paylogic-ticketing-api/demo.html).
+For more info check the [demo](https://github.com/spirosikmd/paylogic-ticketing-api/blob/master/demo.html).
