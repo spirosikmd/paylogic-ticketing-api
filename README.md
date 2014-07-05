@@ -1,8 +1,34 @@
 paylogic-ticketing-api
 ================
 
-See the [component page](https://github.com/spirosikmd/paylogic-ticketing-api) for more information.
-
 ## Getting Started
 
-We've put together a [guide for paylogic-ticketing-api](http://www.polymer-project.org/docs/start/reusableelements.html) to help get you rolling.
+Import the template
+
+```html
+<link rel="import" href="paylogic-ticketing-api.html">
+```
+
+and add the element in your document
+
+```html
+<paylogic-ticketing-api></paylogic-ticketing-api>
+```
+
+You can then use the services of the Paylogic Ticketing API in the following way.
+
+```javascript
+document.addEventListener('polymer-ready', function() {
+  var pta = document.querySelector('paylogic-ticketing-api');
+  pta.addEventListener('init-ready', function() {
+    pta.getEvent('32441a11f9024cd9bf1acdc5c3def80a');
+  });
+  pta.addEventListener('pta-event-loaded', function(e) {
+    document.querySelector('template').model = {
+      event: e.detail
+    };
+  });
+});
+```
+
+For more info check the [demo](https://github.com/spirosikmd/paylogic-ticketing-api/demo.html).
