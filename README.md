@@ -26,9 +26,7 @@ document.addEventListener('polymer-ready', function() {
     pta.getEvent('32441a11f9024cd9bf1acdc5c3def80a');
   });
   pta.addEventListener('pta-event-loaded', function(e) {
-    document.querySelector('template').model = {
-      event: e.detail
-    };
+    console.log(e.detail);
   });
 });
 ```
