@@ -2,16 +2,16 @@
 <link rel="import" href="../core-ajax/core-ajax.html">
 
 <!--
-Element providing solution to no problem in particular.
+Element which encapsulates the functionality provided by the Paylogic API.
 
 ##### Example
 
     <paylogic-ticketing-api></paylogic-ticketing-api>
 
 @element paylogic-ticketing-api
-@blurb Element providing solution to no problem in particular.
+@blurb Element which encapsulates the functionality provided by the Paylogic API.
 @status alpha
-@homepage http://spirosikmd.github.io/paylogic-ticketing-api
+@homepage https://github.com/spirosikmd/paylogic-ticketing-api
 -->
 <polymer-element name="paylogic-ticketing-api" attributes="notitle">
 
@@ -21,12 +21,21 @@ Element providing solution to no problem in particular.
 
     <core-ajax
       auto
-      url="http://gdata.youtube.com/feeds/api/videos/"
-      params='{"alt":"json", "q":"chrome"}'
+      url="private/data.json"
       handleAs="json"
-      on-core-response="{{handleResponse}}"></core-ajax>
+      on-core-response="{{initPrivates}}"></core-ajax>
 
-    <content></content>
+    <core-ajax
+      id="eventService"
+      url="{{baseUrl}}/events/32441a11f9024cd9bf1acdc5c3def80a"
+      headers='{"Authorization": "Basic {{authToken}}"}'
+      handleAs="json"
+      on-core-response="{{handleEventGet}}"></core-ajax>
+
+    <content>
+      <div>{{event.title.en}}</div>
+      <div>{{event.subtitle.en}}</div>
+    </content>
 
   </template>
 
@@ -60,13 +69,32 @@ Element providing solution to no problem in particular.
       },
 
       /**
-       * The `task` method does no work at this time.
+       * The `initPrivates` method initializes settings.
        *
-       * @method task
-       * @return {Object} Returns undefined.
-       * @param {String} dummy Serves no purpose today.
+       * @method initPrivates
+       * @param {CustomEvent} event which fired.
+       * @param {Object} data contains the private json data and the XMLHttpRequest object.
+       * @param {HTMLElement} element which fired the event.
        */
-      task: function(dummy) {
+      initPrivates: function(event, data, element) {
+        this.appId = data.response.appId;
+        this.appSecret = data.response.appSecret;
+        this.authToken = btoa(this.appId + ':' + this.appSecret);
+        this.baseUrl = data.response.baseUrl;
+
+        this.$.eventService.go();
+      },
+
+      /**
+       * The `handleEventGet` method handles the success event to GET /events/<event_uid>.
+       *
+       * @method handleEventGet
+       * @param {CustomEvent} event which fired.
+       * @param {Object} data contains the event object data and the XMLHttpRequest object.
+       * @param {HTMLElement} element which fired the event.
+       */
+      handleEventGet: function(event, data, element) {
+        this.event = data.response;
       }
 
     });

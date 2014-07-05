@@ -1,7 +1,7 @@
 paylogic-ticketing-api
 ================
 
-See the [component page](http://spirosikmd.github.io/paylogic-ticketing-api) for more information.
+See the [component page](https://github.com/spirosikmd/paylogic-ticketing-api) for more information.
 
 ## Getting Started
 
