@@ -10,9 +10,28 @@
 </head>
 <body unresolved>
 
-  <p>An `paylogic-ticketing-api` looks like this:</p>
+  <p>A `paylogic-ticketing-api` looks like this:</p>
 
   <paylogic-ticketing-api></paylogic-ticketing-api>
+
+  <template bind="{{event}}">
+    <div>{{title.en}}</div>
+    <div>{{subtitle.en}}</div>
+  </template>
+
+  <script>
+    document.addEventListener('polymer-ready', function() {
+      var pta = document.querySelector('paylogic-ticketing-api');
+      pta.addEventListener('init-ready', function() {
+        pta.getEvent('32441a11f9024cd9bf1acdc5c3def80a');
+      });
+      pta.addEventListener('pta-event-loaded', function(e) {
+        document.querySelector('template').model = {
+          event: e.detail
+        };
+      });
+    });
+  </script>
 
 </body>
 </html>

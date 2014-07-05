@@ -1,6 +1,3 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../core-ajax/core-ajax.html">
-
 <!--
 Element which encapsulates the functionality provided by the Paylogic Ticketing API.
 
@@ -13,7 +10,12 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 @status alpha
 @homepage https://github.com/spirosikmd/paylogic-ticketing-api
 -->
-<polymer-element name="paylogic-ticketing-api" attributes="notitle">
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
+<link rel="import" href="elements/event-service.html">
+
+<polymer-element name="paylogic-ticketing-api">
 
   <template>
 
@@ -25,76 +27,50 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       handleAs="json"
       on-core-response="{{initPrivates}}"></core-ajax>
 
-    <core-ajax
+    <event-service
       id="eventService"
-      url="{{baseUrl}}/events/32441a11f9024cd9bf1acdc5c3def80a"
-      headers='{"Authorization": "Basic {{authToken}}"}'
-      handleAs="json"
-      on-core-response="{{handleEventGet}}"></core-ajax>
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-event-loaded="{{handleEventLoaded}}"></event-service>
 
-    <content>
-      <div>{{event.title.en}}</div>
-      <div>{{event.subtitle.en}}</div>
-    </content>
+    <content></content>
 
   </template>
 
   <script>
 
     Polymer('paylogic-ticketing-api', {
+
       /**
-       * The `noevent` event is not actually fired from here,
-       * we document it as an example of documenting events.
+       * Fired when initialization of privates is completed.
        *
-       * @event noevent
+       * @event init-ready
        */
 
       /**
-       * The `notitle` attribute does not yet have a purpose.
+       * Fired when the event list has been loaded by the event service.
        *
-       * @attribute notitle
-       * @type string
+       * @event pta-event-loaded
        */
-      notitle: '',
-
-      /**
-       * The `aProp` is a property that does something cool.
-       *
-       * @property aProp
-       * @type bool
-       */
-      aProp: false,
 
       ready: function() {
+        this.events = [];
       },
 
-      /**
-       * The `initPrivates` method initializes settings.
-       *
-       * @method initPrivates
-       * @param {CustomEvent} event which fired.
-       * @param {Object} data contains the private json data and the XMLHttpRequest object.
-       * @param {HTMLElement} element which fired the event.
-       */
-      initPrivates: function(event, data, element) {
-        this.appId = data.response.appId;
-        this.appSecret = data.response.appSecret;
+      initPrivates: function(event) {
+        this.appId = event.detail.response.appId;
+        this.appSecret = event.detail.response.appSecret;
         this.authToken = btoa(this.appId + ':' + this.appSecret);
-        this.baseUrl = data.response.baseUrl;
-
-        this.$.eventService.go();
+        this.baseUrl = event.detail.response.baseUrl;
+        this.fire('init-ready');
       },
 
-      /**
-       * The `handleEventGet` method handles the success event to GET /events/<event_uid>.
-       *
-       * @method handleEventGet
-       * @param {CustomEvent} event which fired.
-       * @param {Object} data contains the event object data and the XMLHttpRequest object.
-       * @param {HTMLElement} element which fired the event.
-       */
-      handleEventGet: function(event, data, element) {
-        this.event = data.response;
+      handleEventLoaded: function(event) {
+        this.fire('pta-event-loaded', event.detail);
+      },
+
+      getEvent: function(eventUid) {
+        this.$.eventService.getEvent(eventUid);
       }
 
     });

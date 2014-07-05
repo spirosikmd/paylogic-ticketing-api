@@ -1,0 +1,55 @@
+<!--
+Element which encapsulates the functionality for the Event resource of the Paylogic Ticketing API.
+
+##### Example
+
+    <event-service
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-event-loaded="{{handleEventLoaded}}"></event-service>
+
+@element event-service
+@blurb Element which encapsulates the functionality for the Event resource of the Paylogic Ticketing API.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../core-ajax/core-ajax.html">
+
+<polymer-element name="event-service" attributes="baseUrl authToken events">
+
+  <template>
+
+    <core-ajax
+      id="ajax"
+      url="{{baseUrl}}events/{{eventUid}}"
+      headers='{"Authorization": "Basic {{authToken}}"}'
+      handleAs="json"
+      on-core-response="{{handleEventGet}}"></core-ajax>
+
+  </template>
+
+  <script>
+
+    Polymer('event-service', {
+
+      /**
+       * Fired when the event has been loaded from the API.
+       *
+       * @event event-loaded
+       */
+
+      handleEventGet: function(event) {
+        this.fire('event-loaded', event.detail.response);
+      },
+
+      getEvent: function(eventUid) {
+        this.eventUid = eventUid;
+        this.$.ajax.go();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>
