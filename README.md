@@ -17,7 +17,7 @@ and add the element in your document
 <paylogic-ticketing-api></paylogic-ticketing-api>
 ```
 
-You can then use the services of the Paylogic Ticketing API in the following way.
+The services of the Paylogic Ticketing API can then be used in the following way.
 
 ```javascript
 document.addEventListener('polymer-ready', function() {
@@ -31,4 +31,4 @@ document.addEventListener('polymer-ready', function() {
 });
 ```
 
-For more info check the [demo](https://github.com/spirosikmd/paylogic-ticketing-api/blob/master/demo.html).
+For more info check the [demo](https://github.com/spirosikmd/paylogic-ticketing-api/blob/master/demo.html). Currently, this will not work for the public, as basic authentication is required.
