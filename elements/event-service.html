@@ -41,13 +41,7 @@ Element which encapsulates the functionality for the Event resource of the Paylo
        * @type string
        * @default events
        */
-      resource: 'events',
-
-      filter: function(params) {
-        this.method = "GET";
-        this.params = params;
-        this.$.ajax.go();
-      }
+      resource: 'events'
 
     });
 
