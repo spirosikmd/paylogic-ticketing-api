@@ -15,8 +15,9 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="../core-ajax/core-ajax.html">
 <link rel="import" href="elements/event-service.html">
 <link rel="import" href="elements/product-service.html">
+<link rel="import" href="elements/location-service.html">
 
-<polymer-element name="paylogic-ticketing-api" attributes="events products">
+<polymer-element name="paylogic-ticketing-api" attributes="events products locations">
 
   <template>
 
@@ -32,13 +33,19 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       id="eventService"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
-      on-events-loaded="{{handleEventsLoaded}}"></event-service>
+      on-events-loaded="{{onResourcesLoaded}}"></event-service>
 
     <product-service
       id="productService"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
-      on-products-loaded="{{handleProductsLoaded}}"></product-service>
+      on-products-loaded="{{onResourcesLoaded}}"></product-service>
+
+    <location-service
+      id="locationService"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-locations-loaded="{{onResourcesLoaded}}"></location-service>
 
     <content></content>
 
@@ -84,9 +91,19 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        */
       products: null,
 
+      /**
+       * The Location resource service.
+       *
+       * @attribute locations
+       * @type location-service
+       * @default null
+       */
+      locations: null,
+
       ready: function() {
         this.events = this.$.eventService;
         this.products = this.$.productService;
+        this.locations = this.$.locationService;
       },
 
       initPrivates: function(event) {
@@ -97,12 +114,9 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
         this.fire('init-ready');
       },
 
-      handleEventsLoaded: function(event) {
-        this.fire('pta-events-loaded', event.detail);
-      },
-
-      handleProductsLoaded: function(event) {
-        this.fire('pta-products-loaded', event.detail);
+      onResourcesLoaded: function(event) {
+        eventName = 'pta-' + event.currentTarget.resource + '-loaded';
+        this.fire(eventName, event.detail);
       }
 
     });

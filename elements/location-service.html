@@ -1,0 +1,50 @@
+<!--
+Element which encapsulates the functionality for the Location resource of the Paylogic Ticketing API.
+
+##### Example
+
+    <location-service
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-locations-loaded="{{onResourcesLoaded}}"></location-service>
+
+@element location-service
+@blurb Element which encapsulates the functionality for the Location resource of the Paylogic Ticketing API.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="resource-service.html">
+
+<polymer-element name="location-service" extends="resource-service">
+
+  <template>
+
+    <shadow></shadow>
+
+  </template>
+
+  <script>
+
+    Polymer('location-service', {
+
+      /**
+       * Fired when the locations have been loaded from the API. Inherited from resource-service element.
+       *
+       * @event locations-loaded
+       */
+
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default locations
+       */
+      resource: 'locations'
+
+    });
+
+  </script>
+
+</polymer-element>

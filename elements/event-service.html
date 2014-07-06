@@ -6,7 +6,7 @@ Element which encapsulates the functionality for the Event resource of the Paylo
     <event-service
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
-      on-event-loaded="{{handleEventLoaded}}"></event-service>
+      on-events-loaded="{{onResourcesLoaded}}"></event-service>
 
 @element event-service
 @blurb Element which encapsulates the functionality for the Event resource of the Paylogic Ticketing API.
@@ -29,7 +29,7 @@ Element which encapsulates the functionality for the Event resource of the Paylo
     Polymer('event-service', {
 
       /**
-       * Fired when the event has been loaded from the API. Inherited from resource-service element.
+       * Fired when the events have been loaded from the API. Inherited from resource-service element.
        *
        * @event events-loaded
        */
