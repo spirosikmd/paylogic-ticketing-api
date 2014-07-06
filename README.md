@@ -5,13 +5,13 @@ It includes a polymer element which encapsulates the functionality provided by t
 
 ## Setup
 
-In order for the demo to work, we need to run
+We only need to run
 
 ```bash
 bower install
 ```
 
-to install the all the dependecies.
+to install all the dependecies.
 
 ## Getting Started
 
