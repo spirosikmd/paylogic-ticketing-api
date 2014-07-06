@@ -23,7 +23,7 @@ Element which encapsulates the functionality for the Event resource of the Paylo
     <core-ajax
       id="ajax"
       method="{{method}}"
-      url="{{baseUrl}}events"
+      url="{{baseUrl}}events{{eventUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       handleAs="json"
@@ -42,15 +42,22 @@ Element which encapsulates the functionality for the Event resource of the Paylo
        */
 
       handleGet: function(event) {
-        this.fire('event-loaded', event.detail.response);
+        response = event.detail.response;
+        if (response.length === undefined) {
+          response = [response];
+        }
+        this.fire('event-loaded', response);
       },
 
       get: function(eventUid) {
         this.method = "GET";
-        var eventUri = this.baseUrl + 'events/' + eventUid;
-        this.params = {
-          "uri": eventUri
-        };
+        this.eventUid = "/" + eventUid;
+        this.$.ajax.go();
+      },
+
+      filter: function(params) {
+        this.method = "GET";
+        this.params = params;
         this.$.ajax.go();
       }
 
