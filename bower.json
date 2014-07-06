@@ -1,7 +1,7 @@
 {
   "name": "paylogic-ticketing-api",
-  "version": "0.0.0",
-  "keywords": "seed, polymer, web-components",
+  "version": "0.1.0",
+  "keywords": "seed, polymer, web-components, paylogic, ticketing, api",
   "main": "paylogic-ticketing-api.html",
   "dependencies": {
     "polymer": "Polymer/polymer#~0.3.3",
