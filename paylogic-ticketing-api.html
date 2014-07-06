@@ -17,6 +17,7 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="elements/product-service.html">
 <link rel="import" href="elements/location-service.html">
 <link rel="import" href="elements/merchant-service.html">
+<link rel="import" href="elements/profile-service.html">
 
 <polymer-element name="paylogic-ticketing-api">
 
@@ -53,6 +54,12 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
       on-merchants-loaded="{{onResourcesLoaded}}"></merchant-service>
+
+    <profile-service
+      id="profiles-service"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-profiles-loaded="{{onResourcesLoaded}}"></profile-service>
 
     <content></content>
 

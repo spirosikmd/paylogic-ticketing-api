@@ -1,0 +1,50 @@
+<!--
+Element which encapsulates the functionality for the Profile resource of the Paylogic Ticketing API.
+
+##### Example
+
+    <profile-service
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-profiles-loaded="{{onResourcesLoaded}}"></profile-service>
+
+@element profile-service
+@blurb Element which encapsulates the functionality for the Profile resource of the Paylogic Ticketing API.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="resource-service.html">
+
+<polymer-element name="profile-service" extends="resource-service">
+
+  <script>
+
+    Polymer('profile-service', {
+
+      /**
+       * Fired when the profiles have been loaded from the API. Inherited from resource-service element.
+       *
+       * @event profiles-loaded
+       */
+
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default profiles
+       */
+      resource: 'profiles',
+
+      create: function(params) {
+        this.method = "POST";
+        this.params = params;
+        this.$.ajax.go();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

@@ -52,6 +52,15 @@
     </ul>
   </div>
 
+  <div>
+    <h1>List of profiles</h1>
+    <ul>
+      <template id="profiles-template" repeat="{{profiles}}">
+        <li>{{email}}</li>
+      </template>
+    </ul>
+  </div>
+
   <script>
     document.addEventListener('polymer-ready', function() {
       var pta = document.querySelector('paylogic-ticketing-api');
@@ -66,6 +75,9 @@
 
         // Get a list of merchants.
         pta.merchants.get();
+
+        // Get a list of profiles.
+        pta.profiles.get();
       });
 
       // Event service has completed loading the event with the requested uid.
@@ -86,6 +98,13 @@
       pta.addEventListener('pta-merchants-loaded', function(e) {
         document.querySelector('#merchants-template').model = {
           merchants: e.detail
+        };
+      });
+
+      // Profile service has completed loading the profiles.
+      pta.addEventListener('pta-profiles-loaded', function(e) {
+        document.querySelector('#profiles-template').model = {
+          profiles: e.detail
         };
       });
     });
