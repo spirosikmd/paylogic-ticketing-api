@@ -27,6 +27,7 @@ ajax functionality and other common actions between resources.
       url="{{baseUrl}}{{resource}}{{resourceUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
+      contentType="application/json"
       handleAs="json"
       on-core-response="{{onResponse}}"></core-ajax>
 
@@ -46,12 +47,18 @@ ajax functionality and other common actions between resources.
        * @event <resource>-loaded
        */
 
+      eventsMethodsMap: {
+        'GET': '-loaded',
+        'POST': '-created'
+      },
+
       onResponse: function(event) {
-        response = event.detail.response;
+        var response = event.detail.response;
         if (response.length === undefined) {
           response = [response];
         }
-        this.fire(this.resource + '-loaded', response);
+        var eventName = this.resource + this.eventsMethodsMap[this.method];
+        this.fire(eventName, response);
       },
 
       get: function(resourceUid) {

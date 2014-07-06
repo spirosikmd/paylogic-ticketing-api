@@ -39,7 +39,9 @@ Element which encapsulates the functionality for the Profile resource of the Pay
 
       create: function(params) {
         this.method = "POST";
-        this.params = params;
+        this.$.ajax.xhrArgs = {
+          body: JSON.stringify(params)
+        };
         this.$.ajax.go();
       }
 

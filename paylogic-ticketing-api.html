@@ -59,7 +59,8 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       id="profiles-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
-      on-profiles-loaded="{{onResourcesLoaded}}"></profile-service>
+      on-profiles-loaded="{{onResourcesLoaded}}"
+      on-profiles-created="{{onResourcesCreated}}"></profile-service>
 
     <content></content>
 
@@ -81,13 +82,13 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        * @event pta-events-loaded
        */
 
-       /**
+      /**
        * Fired when the product list has been loaded by the Product resource service.
        *
        * @event pta-products-loaded
        */
 
-       /**
+      /**
        * Fired when the location list has been loaded by the Location resource service.
        *
        * @event pta-locations-loaded
@@ -114,6 +115,11 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 
       onResourcesLoaded: function(event) {
         eventName = 'pta-' + event.currentTarget.resource + '-loaded';
+        this.fire(eventName, event.detail);
+      },
+
+      onResourcesCreated: function(event) {
+        eventName = 'pta-' + event.currentTarget.resource + '-created';
         this.fire(eventName, event.detail);
       }
 
