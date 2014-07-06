@@ -18,7 +18,7 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="elements/location-service.html">
 <link rel="import" href="elements/merchant-service.html">
 
-<polymer-element name="paylogic-ticketing-api" attributes="events products locations merchants">
+<polymer-element name="paylogic-ticketing-api">
 
   <template>
 
@@ -31,25 +31,25 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       on-core-response="{{initPrivates}}"></core-ajax>
 
     <event-service
-      id="eventService"
+      id="events-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
       on-events-loaded="{{onResourcesLoaded}}"></event-service>
 
     <product-service
-      id="productService"
+      id="products-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
       on-products-loaded="{{onResourcesLoaded}}"></product-service>
 
     <location-service
-      id="locationService"
+      id="locations-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
       on-locations-loaded="{{onResourcesLoaded}}"></location-service>
 
     <merchant-service
-      id="merchantService"
+      id="merchants-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
       on-merchants-loaded="{{onResourcesLoaded}}"></merchant-service>
@@ -86,47 +86,11 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        * @event pta-locations-loaded
        */
 
-      /**
-       * The Event resource service.
-       *
-       * @attribute events
-       * @type event-service
-       * @default null
-       */
-      events: null,
-
-      /**
-       * The Product resource service.
-       *
-       * @attribute products
-       * @type product-service
-       * @default null
-       */
-      products: null,
-
-      /**
-       * The Location resource service.
-       *
-       * @attribute locations
-       * @type location-service
-       * @default null
-       */
-      locations: null,
-
-      /**
-       * The Merchant resource service.
-       *
-       * @attribute merchants
-       * @type merchant-service
-       * @default null
-       */
-      merchants: null,
-
       ready: function() {
-        this.events = this.$.eventService;
-        this.products = this.$.productService;
-        this.locations = this.$.locationService;
-        this.merchants = this.$.merchantService;
+        for (service in this.$) {
+          serviceName = service.split('-')[0]
+          this[serviceName] = this.$[service];
+        }
       },
 
       initPrivates: function(event) {

@@ -28,7 +28,7 @@ ajax functionality and other common actions between resources.
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       handleAs="json"
-      on-core-response="{{handleGet}}"></core-ajax>
+      on-core-response="{{onResponse}}"></core-ajax>
 
   </template>
 
@@ -39,10 +39,14 @@ ajax functionality and other common actions between resources.
       /**
        * Fired when the requested resource(s) has been loaded from the API.
        *
+       * Examples:
+       *   events-loaded
+       *   products-loaded
+       *
        * @event <resource>-loaded
        */
 
-      handleGet: function(event) {
+      onResponse: function(event) {
         response = event.detail.response;
         if (response.length === undefined) {
           response = [response];
