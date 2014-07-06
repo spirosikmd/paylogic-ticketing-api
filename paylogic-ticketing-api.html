@@ -87,9 +87,13 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        */
 
       ready: function() {
-        for (service in this.$) {
-          serviceName = service.split('-')[0]
-          this[serviceName] = this.$[service];
+        for (nodeId in this.$) {
+          var split = nodeId.split('-');
+          var service = split[0];
+          var identifier = split[1];
+          if (identifier === 'service') {
+            this[service] = this.$[nodeId];
+          }
         }
       },
 
