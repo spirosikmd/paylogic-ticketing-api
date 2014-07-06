@@ -1,7 +1,17 @@
 paylogic-ticketing-api
 ================
 
-It includes polymer elements that encapsulate the functionality provided by the Paylogic Ticketing API.
+It includes a polymer element which encapsulates the functionality provided by the Paylogic Ticketing API.
+
+## Setup
+
+In order for the demo to work, we need to run
+
+```bash
+bower install
+```
+
+to install the all the dependecies.
 
 ## Getting Started
 
