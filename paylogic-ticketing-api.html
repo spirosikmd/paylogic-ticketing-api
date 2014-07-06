@@ -15,7 +15,7 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="../core-ajax/core-ajax.html">
 <link rel="import" href="elements/event-service.html">
 
-<polymer-element name="paylogic-ticketing-api">
+<polymer-element name="paylogic-ticketing-api" attributes="events">
 
   <template>
 
@@ -53,8 +53,17 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        * @event pta-event-loaded
        */
 
+      /**
+       * The events service.
+       *
+       * @attribute events
+       * @type event-service
+       * @default null
+       */
+      events: null,
+
       ready: function() {
-        this.events = [];
+        this.events = this.$.eventService;
       },
 
       initPrivates: function(event) {
@@ -67,10 +76,6 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 
       handleEventLoaded: function(event) {
         this.fire('pta-event-loaded', event.detail);
-      },
-
-      getEvent: function(eventUid) {
-        this.$.eventService.getEvent(eventUid);
       }
 
     });

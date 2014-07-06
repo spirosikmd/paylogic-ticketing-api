@@ -31,4 +31,5 @@ document.addEventListener('polymer-ready', function() {
 });
 ```
 
-For more info check the [demo](https://github.com/spirosikmd/paylogic-ticketing-api/blob/master/demo.html). Currently, this will not work for the public, as basic authentication is required.
+For more info check the [demo](https://github.com/spirosikmd/paylogic-ticketing-api/blob/master/demo.html). Currently,
+this will not work for the public, as basic authentication is required.

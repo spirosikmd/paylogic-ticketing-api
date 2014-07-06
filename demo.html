@@ -14,7 +14,7 @@
 
   <paylogic-ticketing-api></paylogic-ticketing-api>
 
-  <template bind="{{event}}">
+  <template repeat="{{events}}">
     <div>{{title.en}}</div>
     <div>{{subtitle.en}}</div>
   </template>
@@ -22,12 +22,17 @@
   <script>
     document.addEventListener('polymer-ready', function() {
       var pta = document.querySelector('paylogic-ticketing-api');
+
+      // Initialization of privates is completed.
       pta.addEventListener('init-ready', function() {
-        pta.getEvent('32441a11f9024cd9bf1acdc5c3def80a');
+        // This should use the event uri, instead of the uid.
+        pta.events.get('32441a11f9024cd9bf1acdc5c3def80a');
       });
+
+      // Event service has completed loading the event with the requested uid.
       pta.addEventListener('pta-event-loaded', function(e) {
         document.querySelector('template').model = {
-          event: e.detail
+          events: e.detail
         };
       });
     });

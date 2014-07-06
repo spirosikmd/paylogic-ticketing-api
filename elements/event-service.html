@@ -16,16 +16,18 @@ Element which encapsulates the functionality for the Event resource of the Paylo
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../core-ajax/core-ajax.html">
 
-<polymer-element name="event-service" attributes="baseUrl authToken events">
+<polymer-element name="event-service" attributes="baseUrl authToken">
 
   <template>
 
     <core-ajax
       id="ajax"
-      url="{{baseUrl}}events/{{eventUid}}"
+      method="{{method}}"
+      url="{{baseUrl}}events"
+      params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       handleAs="json"
-      on-core-response="{{handleEventGet}}"></core-ajax>
+      on-core-response="{{handleGet}}"></core-ajax>
 
   </template>
 
@@ -39,12 +41,16 @@ Element which encapsulates the functionality for the Event resource of the Paylo
        * @event event-loaded
        */
 
-      handleEventGet: function(event) {
+      handleGet: function(event) {
         this.fire('event-loaded', event.detail.response);
       },
 
-      getEvent: function(eventUid) {
-        this.eventUid = eventUid;
+      get: function(eventUid) {
+        this.method = "GET";
+        var eventUri = this.baseUrl + 'events/' + eventUid;
+        this.params = {
+          "uri": eventUri
+        };
         this.$.ajax.go();
       }
 
