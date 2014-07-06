@@ -1,0 +1,63 @@
+<!--
+Element which is meant to be extended by the service elements. It provides the
+ajax functionality and other common actions between resources.
+
+@element resource-service
+@blurb Element which is meant to be extended by the service elements. It
+  provides the ajax functionality and other common actions between resources.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../core-ajax/core-ajax.html">
+
+<polymer-element name="resource-service" attributes="resource baseUrl authToken">
+
+  <template>
+
+    <core-ajax
+      id="ajax"
+      method="{{method}}"
+      url="{{baseUrl}}{{resource}}{{resourceUid}}"
+      params="{{params}}"
+      headers='{"Authorization": "Basic {{authToken}}"}'
+      handleAs="json"
+      on-core-response="{{handleGet}}"></core-ajax>
+
+  </template>
+
+  <script>
+
+    Polymer('resource-service', {
+
+      /**
+       * Fired when the requested resource(s) has been loaded from the API.
+       *
+       * @event <resource>-loaded
+       */
+
+      handleGet: function(event) {
+        response = event.detail.response;
+        if (response.length === undefined) {
+          response = [response];
+        }
+        this.fire(this.resource + '-loaded', response);
+      },
+
+      get: function(resourceUid) {
+        this.method = "GET";
+        this.resourceUid = "/" + resourceUid;
+        this.$.ajax.go();
+      },
+
+      filter: function(params) {
+        this.method = "GET";
+        this.params = params;
+        this.$.ajax.go();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

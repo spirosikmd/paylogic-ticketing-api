@@ -14,20 +14,13 @@ Element which encapsulates the functionality for the Event resource of the Paylo
 -->
 
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../core-ajax/core-ajax.html">
+<link rel="import" href="resource-service.html">
 
-<polymer-element name="event-service" attributes="baseUrl authToken">
+<polymer-element name="event-service" extends="resource-service">
 
   <template>
 
-    <core-ajax
-      id="ajax"
-      method="{{method}}"
-      url="{{baseUrl}}events{{eventUid}}"
-      params="{{params}}"
-      headers='{"Authorization": "Basic {{authToken}}"}'
-      handleAs="json"
-      on-core-response="{{handleGet}}"></core-ajax>
+    <shadow></shadow>
 
   </template>
 
@@ -36,24 +29,19 @@ Element which encapsulates the functionality for the Event resource of the Paylo
     Polymer('event-service', {
 
       /**
-       * Fired when the event has been loaded from the API.
+       * Fired when the event has been loaded from the API. Inherited from resource-service element.
        *
        * @event events-loaded
        */
 
-      handleGet: function(event) {
-        response = event.detail.response;
-        if (response.length === undefined) {
-          response = [response];
-        }
-        this.fire('events-loaded', response);
-      },
-
-      get: function(eventUid) {
-        this.method = "GET";
-        this.eventUid = "/" + eventUid;
-        this.$.ajax.go();
-      },
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default events
+       */
+      resource: 'events',
 
       filter: function(params) {
         this.method = "GET";

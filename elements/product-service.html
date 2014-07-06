@@ -14,20 +14,13 @@ Element which encapsulates the functionality for the Product resource of the Pay
 -->
 
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../core-ajax/core-ajax.html">
+<link rel="import" href="resource-service.html">
 
-<polymer-element name="product-service" attributes="baseUrl authToken">
+<polymer-element name="product-service" extends="resource-service">
 
   <template>
 
-    <core-ajax
-      id="ajax"
-      method="{{method}}"
-      url="{{baseUrl}}products{{productUid}}"
-      params="{{params}}"
-      headers='{"Authorization": "Basic {{authToken}}"}'
-      handleAs="json"
-      on-core-response="{{handleGet}}"></core-ajax>
+    <shadow></shadow>
 
   </template>
 
@@ -36,24 +29,19 @@ Element which encapsulates the functionality for the Product resource of the Pay
     Polymer('product-service', {
 
       /**
-       * Fired when the products have been loaded from the API.
+       * Fired when the products have been loaded from the API. Inherited from resource-service element.
        *
        * @event products-loaded
        */
 
-      handleGet: function(event) {
-        response = event.detail.response;
-        if (response.length === undefined) {
-          response = [response];
-        }
-        this.fire('products-loaded', response);
-      },
-
-      get: function(productUid) {
-        this.method = "GET";
-        this.productUid = "/" + productUid;
-        this.$.ajax.go();
-      },
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default products
+       */
+      resource: 'products',
 
       filter: function(params) {
         this.method = "GET";
