@@ -46,7 +46,9 @@ ajax functionality and other common actions between resources.
 
       get: function(resourceUid) {
         this.method = "GET";
-        this.resourceUid = "/" + resourceUid;
+        if (resourceUid !== undefined) {
+          this.resourceUid = "/" + resourceUid;
+        }
         this.$.ajax.go();
       },
 

@@ -16,8 +16,9 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="elements/event-service.html">
 <link rel="import" href="elements/product-service.html">
 <link rel="import" href="elements/location-service.html">
+<link rel="import" href="elements/merchant-service.html">
 
-<polymer-element name="paylogic-ticketing-api" attributes="events products locations">
+<polymer-element name="paylogic-ticketing-api" attributes="events products locations merchants">
 
   <template>
 
@@ -47,6 +48,12 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       baseUrl="{{baseUrl}}"
       on-locations-loaded="{{onResourcesLoaded}}"></location-service>
 
+    <merchant-service
+      id="merchantService"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-merchants-loaded="{{onResourcesLoaded}}"></merchant-service>
+
     <content></content>
 
   </template>
@@ -71,6 +78,12 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        * Fired when the product list has been loaded by the Product resource service.
        *
        * @event pta-products-loaded
+       */
+
+       /**
+       * Fired when the location list has been loaded by the Location resource service.
+       *
+       * @event pta-locations-loaded
        */
 
       /**
@@ -100,10 +113,20 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        */
       locations: null,
 
+      /**
+       * The Merchant resource service.
+       *
+       * @attribute merchants
+       * @type merchant-service
+       * @default null
+       */
+      merchants: null,
+
       ready: function() {
         this.events = this.$.eventService;
         this.products = this.$.productService;
         this.locations = this.$.locationService;
+        this.merchants = this.$.merchantService;
       },
 
       initPrivates: function(event) {

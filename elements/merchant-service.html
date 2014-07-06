@@ -1,0 +1,50 @@
+<!--
+Element which encapsulates the functionality for the Merchant resource of the Paylogic Ticketing API.
+
+##### Example
+
+    <merchant-service
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-merchants-loaded="{{onResourcesLoaded}}"></merchant-service>
+
+@element merchant-service
+@blurb Element which encapsulates the functionality for the Merchant resource of the Paylogic Ticketing API.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="resource-service.html">
+
+<polymer-element name="merchant-service" extends="resource-service">
+
+  <template>
+
+    <shadow></shadow>
+
+  </template>
+
+  <script>
+
+    Polymer('merchant-service', {
+
+      /**
+       * Fired when the merchants have been loaded from the API. Inherited from resource-service element.
+       *
+       * @event merchants-loaded
+       */
+
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default merchants
+       */
+      resource: 'merchants'
+
+    });
+
+  </script>
+
+</polymer-element>
