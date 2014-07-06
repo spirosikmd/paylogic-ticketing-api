@@ -26,7 +26,7 @@ document.addEventListener('polymer-ready', function() {
   // Initialization of privates is completed.
   pta.addEventListener('init-ready', function() {
     // Use the event uri to get a specific event.
-    pta.events.get("<event_Uid>");
+    pta.events.get("<event_uri>");
     // Or use the event uri in the filter method. This has the same result as the previous example.
     pta.events.filter({"uri": "<event_uri>"})
   });
