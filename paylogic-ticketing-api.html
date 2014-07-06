@@ -14,8 +14,9 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../core-ajax/core-ajax.html">
 <link rel="import" href="elements/event-service.html">
+<link rel="import" href="elements/product-service.html">
 
-<polymer-element name="paylogic-ticketing-api" attributes="events">
+<polymer-element name="paylogic-ticketing-api" attributes="events products">
 
   <template>
 
@@ -31,7 +32,13 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       id="eventService"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
-      on-event-loaded="{{handleEventLoaded}}"></event-service>
+      on-events-loaded="{{handleEventsLoaded}}"></event-service>
+
+    <product-service
+      id="productService"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"
+      on-products-loaded="{{handleProductsLoaded}}"></product-service>
 
     <content></content>
 
@@ -48,13 +55,19 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        */
 
       /**
-       * Fired when the event list has been loaded by the event service.
+       * Fired when the event list has been loaded by the Event resource service.
        *
-       * @event pta-event-loaded
+       * @event pta-events-loaded
+       */
+
+       /**
+       * Fired when the product list has been loaded by the Product resource service.
+       *
+       * @event pta-products-loaded
        */
 
       /**
-       * The events service.
+       * The Event resource service.
        *
        * @attribute events
        * @type event-service
@@ -62,8 +75,18 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        */
       events: null,
 
+      /**
+       * The Product resource service.
+       *
+       * @attribute products
+       * @type product-service
+       * @default null
+       */
+      products: null,
+
       ready: function() {
         this.events = this.$.eventService;
+        this.products = this.$.productService;
       },
 
       initPrivates: function(event) {
@@ -74,8 +97,12 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
         this.fire('init-ready');
       },
 
-      handleEventLoaded: function(event) {
-        this.fire('pta-event-loaded', event.detail);
+      handleEventsLoaded: function(event) {
+        this.fire('pta-events-loaded', event.detail);
+      },
+
+      handleProductsLoaded: function(event) {
+        this.fire('pta-products-loaded', event.detail);
       }
 
     });

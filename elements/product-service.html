@@ -1,29 +1,29 @@
 <!--
-Element which encapsulates the functionality for the Event resource of the Paylogic Ticketing API.
+Element which encapsulates the functionality for the Product resource of the Paylogic Ticketing API.
 
 ##### Example
 
-    <event-service
+    <product-service
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"
-      on-event-loaded="{{handleEventLoaded}}"></event-service>
+      on-products-loaded="{{handleProductsLoaded}}"></product-service>
 
-@element event-service
-@blurb Element which encapsulates the functionality for the Event resource of the Paylogic Ticketing API.
+@element product-service
+@blurb Element which encapsulates the functionality for the Product resource of the Paylogic Ticketing API.
 @status alpha
 -->
 
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../core-ajax/core-ajax.html">
 
-<polymer-element name="event-service" attributes="baseUrl authToken">
+<polymer-element name="product-service" attributes="baseUrl authToken">
 
   <template>
 
     <core-ajax
       id="ajax"
       method="{{method}}"
-      url="{{baseUrl}}events{{eventUid}}"
+      url="{{baseUrl}}products{{productUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       handleAs="json"
@@ -33,12 +33,12 @@ Element which encapsulates the functionality for the Event resource of the Paylo
 
   <script>
 
-    Polymer('event-service', {
+    Polymer('product-service', {
 
       /**
-       * Fired when the event has been loaded from the API.
+       * Fired when the products have been loaded from the API.
        *
-       * @event events-loaded
+       * @event products-loaded
        */
 
       handleGet: function(event) {
@@ -46,18 +46,18 @@ Element which encapsulates the functionality for the Event resource of the Paylo
         if (response.length === undefined) {
           response = [response];
         }
-        this.fire('events-loaded', response);
+        this.fire('products-loaded', response);
       },
 
-      get: function(eventUid) {
+      get: function(productUid) {
         this.method = "GET";
-        this.eventUid = "/" + eventUid;
+        this.productUid = "/" + productUid;
         this.$.ajax.go();
       },
 
       filter: function(params) {
         this.method = "GET";
-        this.params = params;
+        this.params['event'] = this.baseUrl + 'events/' + params['event'];
         this.$.ajax.go();
       }
 

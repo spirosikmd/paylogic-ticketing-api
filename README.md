@@ -27,12 +27,21 @@ document.addEventListener('polymer-ready', function() {
   pta.addEventListener('init-ready', function() {
     // Use the event uri to get a specific event.
     pta.events.get("<event_uri>");
+
     // Or use the event uri in the filter method. This has the same result as the previous example.
-    pta.events.filter({"uri": "<event_uri>"})
+    pta.events.filter({"uri": "<event_uri>"});
+
+    // Get the products for a specific event.
+    pta.products.filter({"event": "<event_uri>"});
   });
 
   // Event service has completed loading the event with the requested uid.
-  pta.addEventListener('pta-event-loaded', function(e) {
+  pta.addEventListener('pta-events-loaded', function(e) {
+    console.log(e.detail);
+  });
+
+  // Product service has completed loading the products for the specified event.
+  pta.addEventListener('pta-products-loaded', function(e) {
     console.log(e.detail);
   });
 });

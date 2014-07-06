@@ -10,13 +10,35 @@
 </head>
 <body unresolved>
 
-  <p>A `paylogic-ticketing-api` looks like this:</p>
-
   <paylogic-ticketing-api></paylogic-ticketing-api>
 
-  <template repeat="{{events}}">
-    <div>{{title.en}}</div>
-    <div>{{subtitle.en}}</div>
+  <template id="events-template" repeat="{{events}}">
+    <h1>{{title.en}}</h1>
+    <h2>{{subtitle.en}}</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Subtitle</th>
+          <th>Price</th>
+          <th>Availability</th>
+          <th>Min</th>
+          <th>Max</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template id="products-template" repeat="{{products}}">
+          <tr>
+            <td>{{name.en}}</td>
+            <td>{{subtitle.en}}</td>
+            <td>{{price.currency}} {{price.amount}}</td>
+            <td>{{availability}}</td>
+            <td>{{min_quantity}}</td>
+            <td>{{max_quantity}}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
   </template>
 
   <script>
@@ -25,14 +47,24 @@
 
       // Initialization of privates is completed.
       pta.addEventListener('init-ready', function() {
-        // This should use the event uri, instead of the uid.
+        // Use the event uid to get a specific event. This should use the event uri, instead of the uid.
         pta.events.get('32441a11f9024cd9bf1acdc5c3def80a');
+
+        // Use the event uid to get products for a specific event. This should use the event uri, instead of the uid.
+        pta.products.filter({"event": "32441a11f9024cd9bf1acdc5c3def80a"});
       });
 
       // Event service has completed loading the event with the requested uid.
-      pta.addEventListener('pta-event-loaded', function(e) {
-        document.querySelector('template').model = {
+      pta.addEventListener('pta-events-loaded', function(e) {
+        document.querySelector('#events-template').model = {
           events: e.detail
+        };
+      });
+
+      // Product service has completed loading the products from the specified event.
+      pta.addEventListener('pta-products-loaded', function(e) {
+        document.querySelector('#products-template').model = {
+          products: e.detail
         };
       });
     });
