@@ -35,13 +35,7 @@ Element which encapsulates the functionality for the Product resource of the Pay
        * @type string
        * @default products
        */
-      resource: 'products',
-
-      filter: function(params) {
-        this.method = "GET";
-        this.params['event'] = this.baseUrl + 'events/' + params['event'];
-        this.$.ajax.go();
-      }
+      resource: 'products'
 
     });
 

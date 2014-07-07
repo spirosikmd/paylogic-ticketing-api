@@ -12,9 +12,10 @@
 
   <paylogic-ticketing-api></paylogic-ticketing-api>
 
+  <h1>List of Events</h1>
   <template id="events-template" repeat="{{events}}">
-    <h1>{{title.en}}</h1>
-    <h2>{{subtitle.en}}</h2>
+    <h2>{{title.en}}</h2>
+    <h3>{{subtitle.en}}</h3>
     <p>{{description.en}}</p>
     <p>{{long_description.en}}</p>
     <table>
@@ -65,13 +66,15 @@
     document.addEventListener('polymer-ready', function() {
       var pta = document.querySelector('paylogic-ticketing-api');
 
+      var eventUri = "https://ticketapi.sandbox.paylogic.com/events/61864469fc2c4abab0039fab9907ad1c";
+
       // Initialization of privates is completed.
       pta.addEventListener('init-ready', function() {
-        // Use the event uid to get a specific event. This should use the event uri, instead of the uid.
-        pta.events.get('32441a11f9024cd9bf1acdc5c3def80a');
+        // Use the event uri to get a specific event.
+        pta.events.get(eventUri);
 
-        // Use the event uid to get products for a specific event. This should use the event uri, instead of the uid.
-        pta.products.filter({"event": "32441a11f9024cd9bf1acdc5c3def80a"});
+        // Use the event uri to get products for a specific event.
+        pta.products.filter({"event": eventUri});
 
         // Get a list of merchants.
         pta.merchants.get();
