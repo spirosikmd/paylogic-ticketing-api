@@ -232,7 +232,7 @@
         pta.addEventListener('baskets-created', function(e) {
           console.log("Basket created: ", e.detail[0]);
           var basketUri = e.detail[0].uri;
-          // Delete a basket after created.
+          // Delete a basket after it has been created.
           pta.baskets.delete({
             basketUri: basketUri
           });
