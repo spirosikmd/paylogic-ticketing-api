@@ -47,12 +47,12 @@ document.addEventListener('polymer-ready', function() {
   });
 
   // Event service has completed loading the event with the requested uid.
-  pta.addEventListener('pta-events-loaded', function(e) {
+  pta.addEventListener('events-loaded', function(e) {
     console.log(e.detail);
   });
 
   // Product service has completed loading the products for the specified event.
-  pta.addEventListener('pta-products-loaded', function(e) {
+  pta.addEventListener('products-loaded', function(e) {
     console.log(e.detail);
   });
 });
