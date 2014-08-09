@@ -22,8 +22,28 @@ ajax functionality and other common actions between resources.
     </style>
 
     <core-ajax
-      id="ajax"
-      method="{{method}}"
+      id="ajaxGET"
+      method="GET"
+      url="{{baseUrl}}{{resource}}{{resourceUid}}"
+      params="{{params}}"
+      headers='{"Authorization": "Basic {{authToken}}"}'
+      contentType="application/json"
+      handleAs="json"
+      on-core-response="{{onResponse}}"></core-ajax>
+
+    <core-ajax
+      id="ajaxPOST"
+      method="POST"
+      url="{{baseUrl}}{{resource}}{{resourceUid}}"
+      params="{{params}}"
+      headers='{"Authorization": "Basic {{authToken}}"}'
+      contentType="application/json"
+      handleAs="json"
+      on-core-response="{{onResponse}}"></core-ajax>
+
+    <core-ajax
+      id="ajaxPUT"
+      method="PUT"
       url="{{baseUrl}}{{resource}}{{resourceUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
@@ -47,33 +67,56 @@ ajax functionality and other common actions between resources.
        * @event <resource>-loaded
        */
 
+       /**
+       * Fired when a resource has been created.
+       *
+       * Examples:
+       *   profiles-created
+       *
+       * @event <resource>-created
+       */
+
+       /**
+       * Fired when a resource has been updated.
+       *
+       * Examples:
+       *   profiles-updated
+       *
+       * @event <resource>-updated
+       */
+
       eventsMethodsMap: {
         'GET': '-loaded',
-        'POST': '-created'
+        'POST': '-created',
+        'PUT': '-updated'
+      },
+
+      getResourceUid: function(resourceUri) {
+        var resourceUid = undefined;
+        if (resourceUri !== undefined) {
+          resourceUid = "/" + resourceUri.split('/')[4];
+        }
+        return resourceUid;
       },
 
       onResponse: function(event) {
+        var method = event.currentTarget.method;
         var response = event.detail.response;
         if (response.length === undefined) {
           response = [response];
         }
-        var eventName = this.resource + this.eventsMethodsMap[this.method];
+        var eventName = this.resource + this.eventsMethodsMap[method];
         this.fire(eventName, response);
       },
 
       get: function(resourceUri) {
-        this.method = "GET";
-        if (resourceUri !== undefined) {
-          resourceUid = resourceUri.split('/')[4];
-          this.resourceUid = "/" + resourceUid;
-        }
-        this.$.ajax.go();
+        this.resourceUid = this.getResourceUid(resourceUri);
+        this.$.ajaxGET.go();
       },
 
       filter: function(params) {
-        this.method = "GET";
         this.params = params;
-        this.$.ajax.go();
+        this.$.ajaxGET.go();
       }
 
     });

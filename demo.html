@@ -12,10 +12,9 @@
 
   <paylogic-ticketing-api></paylogic-ticketing-api>
 
-  <h1>List of Events</h1>
-  <template id="events-template" repeat="{{events}}">
-    <h2>{{title.en}}</h2>
-    <h3>{{subtitle.en}}</h3>
+  <template id="event-template" repeat="{{events}}">
+    <h1>{{title.en}}</h1>
+    <h2>{{subtitle.en}}</h2>
     <p>{{description.en}}</p>
     <p>{{long_description.en}}</p>
     <table>
@@ -62,6 +61,70 @@
     </ul>
   </div>
 
+  <div>
+    <h1>Info about created profile</h1>
+    <template id="created-profile-template" repeat="{{profiles}}">
+      <dl>
+        <dt>Email</dt>
+          <dd>{{email}}</dd>
+        <dt>Country</dt>
+          <dd>{{country}}</dd>
+        <dt>First Name</dt>
+          <dd>{{first_name}}</dd>
+        <dt>Last Name</dt>
+          <dd>{{last_name}}</dd>
+        <dt>Gender</dt>
+          <dd>{{gender}}</dd>
+        <dt>Date of birth</dt>
+          <dd>{{date_of_birth}}</dd>
+      </template>
+    </ul>
+  </div>
+
+  <div>
+    <h1>Info about updated profile</h1>
+    <template id="updated-profile-template" repeat="{{profiles}}">
+      <dl>
+        <dt>Email</dt>
+          <dd>{{email}}</dd>
+        <dt>Country</dt>
+          <dd>{{country}}</dd>
+        <dt>First Name</dt>
+          <dd>{{first_name}}</dd>
+        <dt>Last Name</dt>
+          <dd>{{last_name}}</dd>
+        <dt>Gender</dt>
+          <dd>{{gender}}</dd>
+        <dt>Date of birth</dt>
+          <dd>{{date_of_birth}}</dd>
+      </template>
+    </ul>
+  </div>
+
+  <div>
+    <h1>List of locations</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>City</th>
+          <th>Country</th>
+          <th>Zipcode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template id="locations-template" repeat="{{locations}}">
+          <tr>
+            <td>{{name.en}}</td>
+            <td>{{city.en}}</td>
+            <td>{{country}}</td>
+            <td>{{zipcode}}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
   <script>
     document.addEventListener('polymer-ready', function() {
       var pta = document.querySelector('paylogic-ticketing-api');
@@ -81,33 +144,77 @@
 
         // Get a list of profiles.
         pta.profiles.get();
+
+        // Create a profile.
+        pta.profiles.create({
+          "country": "NL",
+          "date_of_birth": "1976-06-04",
+          "email": "marc@example.com",
+          "first_name": "Marc",
+          "gender": 1,
+          "last_name": "Legend"
+        });
+
+        var profileUri = "https://ticketapi.sandbox.paylogic.com/profiles/a2107be0765e480fa7c639775e4f9444";
+
+        // Update a profile.
+        pta.profiles.update({
+          profileUri: profileUri,
+          data: {
+            "email": "nick@example.com"
+          }
+        });
+
+        // Get a list of locations.
+        pta.locations.get();
       });
 
       // Event service has completed loading the event with the requested uid.
-      pta.addEventListener('pta-events-loaded', function(e) {
-        document.querySelector('#events-template').model = {
+      pta.addEventListener('events-loaded', function(e) {
+        document.querySelector('#event-template').model = {
           events: e.detail
         };
       });
 
       // Product service has completed loading the products from the specified event.
-      pta.addEventListener('pta-products-loaded', function(e) {
+      pta.addEventListener('products-loaded', function(e) {
         document.querySelector('#products-template').model = {
           products: e.detail
         };
       });
 
       // Merchant service has completed loading the merchants.
-      pta.addEventListener('pta-merchants-loaded', function(e) {
+      pta.addEventListener('merchants-loaded', function(e) {
         document.querySelector('#merchants-template').model = {
           merchants: e.detail
         };
       });
 
+      // Profile service has completed creating a profile.
+      pta.addEventListener('profiles-created', function(e) {
+        document.querySelector('#created-profile-template').model = {
+          profiles: e.detail
+        };
+      });
+
+      // Profile service has completed updating a profile.
+      pta.addEventListener('profiles-updated', function(e) {
+        document.querySelector('#updated-profile-template').model = {
+          profiles: e.detail
+        };
+      });
+
       // Profile service has completed loading the profiles.
-      pta.addEventListener('pta-profiles-loaded', function(e) {
+      pta.addEventListener('profiles-loaded', function(e) {
         document.querySelector('#profiles-template').model = {
           profiles: e.detail
+        };
+      });
+
+      // Location service has completed loading the locations.
+      pta.addEventListener('locations-loaded', function(e) {
+        document.querySelector('#locations-template').model = {
+          locations: e.detail
         };
       });
     });

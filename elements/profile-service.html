@@ -28,6 +28,18 @@ Element which encapsulates the functionality for the Profile resource of the Pay
        * @event profiles-loaded
        */
 
+       /**
+       * Fired when a profile has been created. Inherited from resource-service element.
+       *
+       * @event profiles-created
+       */
+
+       /**
+       * Fired when a profile has been updated. Inherited from resource-service element.
+       *
+       * @event profiles-updated
+       */
+
       /**
        * The type of the resource.
        *
@@ -38,11 +50,18 @@ Element which encapsulates the functionality for the Profile resource of the Pay
       resource: 'profiles',
 
       create: function(params) {
-        this.method = "POST";
-        this.$.ajax.xhrArgs = {
+        this.$.ajaxPOST.xhrArgs = {
           body: JSON.stringify(params)
         };
-        this.$.ajax.go();
+        this.$.ajaxPOST.go();
+      },
+
+      update: function(params) {
+        this.resourceUid = this.getResourceUid(params.profileUri)
+        this.$.ajaxPUT.xhrArgs = {
+          body: JSON.stringify(params.data)
+        };
+        this.$.ajaxPUT.go();
       }
 
     });
