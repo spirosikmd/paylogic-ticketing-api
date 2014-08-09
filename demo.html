@@ -125,6 +125,24 @@
     </table>
   </div>
 
+  <div>
+    <h1>List of baskets for a specified profile</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template id="baskets-template" repeat="{{baskets}}">
+          <tr>
+            <td>{{created}}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
   <script>
     (function() {
       'use-strict';
@@ -132,10 +150,10 @@
       document.addEventListener('polymer-ready', function() {
         var pta = document.querySelector('paylogic-ticketing-api');
 
-        var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
-
         // Initialization of privates is completed.
         document.addEventListener('init-ready', function() {
+          var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
+
           // Use the event uri to get a specific event.
           pta.events.get(eventUri);
 
@@ -177,6 +195,11 @@
           pta.baskets.create({
             profile: profileRevisionUri
           });
+
+          // Filter baskets on profile.
+          pta.baskets.filter({
+            profile: profileRevisionUri
+          })
         });
 
         // Event service has loaded the event with the requested uid.
@@ -241,6 +264,13 @@
         // Basket service has deleted a basket.
         document.addEventListener('baskets-deleted', function(e) {
           console.log("Basket deleted: ", e.detail[0]);
+        });
+
+        // Basket service has loaded the baskets with specified profile.
+        document.addEventListener('baskets-loaded', function(e) {
+          document.querySelector('#baskets-template').model = {
+            baskets: e.detail
+          };
         });
       });
     })();
