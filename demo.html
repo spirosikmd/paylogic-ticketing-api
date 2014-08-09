@@ -256,9 +256,7 @@
           console.log("Basket created: ", e.detail[0]);
           var basketUri = e.detail[0].uri;
           // Delete a basket after it has been created.
-          pta.baskets.delete({
-            basketUri: basketUri
-          });
+          pta.baskets.delete(basketUri);
         });
 
         // Basket service has deleted a basket.

@@ -4,7 +4,7 @@ Element which encapsulates the functionality for the Basket resource of the Payl
 ##### Example
 
     <basket-service
-      id="basket-service"
+      id="baskets-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"></basket-service>
 
@@ -16,7 +16,7 @@ Element which encapsulates the functionality for the Basket resource of the Payl
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="resource-service.html">
 
-<polymer-element name="basket-service" extends="resource-service">
+<polymer-element name="basket-service" extends="resource-service" hidden>
 
   <script>
 
@@ -56,10 +56,11 @@ Element which encapsulates the functionality for the Basket resource of the Payl
       resource: 'baskets',
 
       /**
-       * Create a basket.
+       * Creates a basket.
        *
-       * params is optional and can contain a profile revision uri.
-       *
+       * @method create
+       * @param {Object} params Optional
+       *    @param {String} params.profileRevisionUri The uri of the profile revision to relate to created basket.
        */
       create: function(params) {
         if (params !== undefined) {
@@ -71,14 +72,12 @@ Element which encapsulates the functionality for the Basket resource of the Payl
       },
 
       /**
-       * Update a basket.
+       * Updates a basket.
        *
-       * params must have the following form
-       *   { basketUri: "basketUri" }
-       *
-       * params can contain optional extra fields to update the bakset with. For example,
-       *   { "basketUri": "basketUri", "data": { "profile": "profileRevisionUri"} }
-       *
+       * @method update
+       * @param {Object} params
+       *    @param {String} params.basketUri The uri of the basket to update.
+       *    @param {Object} params.data The basket data to update.
        */
       update: function(params) {
         this.resourceUid = this.getResourceUid(params.basketUri)
@@ -89,17 +88,13 @@ Element which encapsulates the functionality for the Basket resource of the Payl
       },
 
       /**
-       * Delete a basket.
+       * Deletes a basket.
        *
-       * params must have the following form
-       *   { basketUri: "basketUri" }
-       *
+       * @method delete
+       * @param {String} basketUri The uri of the basket to delete.
        */
-      delete: function(params) {
-        this.resourceUid = this.getResourceUid(params.basketUri)
-        this.$.ajaxDELETE.xhrArgs = {
-          body: JSON.stringify(params)
-        };
+      delete: function(basketUri) {
+        this.resourceUid = this.getResourceUid(basketUri)
         this.$.ajaxDELETE.go();
       },
 

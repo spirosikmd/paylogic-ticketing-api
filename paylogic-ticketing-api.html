@@ -19,12 +19,11 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="elements/merchant-service.html">
 <link rel="import" href="elements/profile-service.html">
 <link rel="import" href="elements/basket-service.html">
+<link rel="import" href="elements/order-service.html">
 
-<polymer-element name="paylogic-ticketing-api">
+<polymer-element name="paylogic-ticketing-api" hidden>
 
   <template>
-
-    <link rel="stylesheet" href="paylogic-ticketing-api.css" />
 
     <core-ajax
       auto
@@ -61,6 +60,11 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       id="baskets-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"></basket-service>
+
+    <order-service
+      id="orders-service"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"></order-service>
 
     <content></content>
 

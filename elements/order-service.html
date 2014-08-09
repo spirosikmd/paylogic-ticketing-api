@@ -1,0 +1,65 @@
+<!--
+Element which encapsulates the functionality for the Order resource of the Paylogic Ticketing API.
+
+##### Example
+
+    <order-service
+      id="orders-service"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"></order-service>
+
+@element order-service
+@blurb Element which encapsulates the functionality for the Order resource of the Paylogic Ticketing API.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="resource-service.html">
+
+<polymer-element name="order-service" extends="resource-service" hidden>
+
+  <script>
+
+    Polymer('order-service', {
+
+      /**
+       * Fired when the orders have been loaded from the API. Inherited from resource-service element.
+       *
+       * @event orders-loaded
+       */
+
+       /**
+       * Fired when a order has been created. Inherited from resource-service element.
+       *
+       * @event orders-created
+       */
+
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default orders
+       */
+      resource: 'orders',
+
+      /**
+       * Create a normal order or a free order.
+       *
+       * @method create
+       * @param {Object} params
+       *    @param {String} params.basket The uri of the basket to create the order from.
+       *    @param {String} params.paymentmethod The uri of the payment method to use when creating the order. Do not include in case of free order.
+       */
+      create: function(params) {
+        this.$.ajaxPOST.xhrArgs = {
+          body: JSON.stringify(params)
+        };
+        this.$.ajaxPOST.go();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>
