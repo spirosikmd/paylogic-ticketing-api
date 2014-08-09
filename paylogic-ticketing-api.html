@@ -34,33 +34,27 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
     <event-service
       id="events-service"
       authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"
-      on-events-loaded="{{onResourcesLoaded}}"></event-service>
+      baseUrl="{{baseUrl}}"></event-service>
 
     <product-service
       id="products-service"
       authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"
-      on-products-loaded="{{onResourcesLoaded}}"></product-service>
+      baseUrl="{{baseUrl}}"></product-service>
 
     <location-service
       id="locations-service"
       authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"
-      on-locations-loaded="{{onResourcesLoaded}}"></location-service>
+      baseUrl="{{baseUrl}}"></location-service>
 
     <merchant-service
       id="merchants-service"
       authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"
-      on-merchants-loaded="{{onResourcesLoaded}}"></merchant-service>
+      baseUrl="{{baseUrl}}"></merchant-service>
 
     <profile-service
       id="profiles-service"
       authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"
-      on-profiles-loaded="{{onResourcesLoaded}}"
-      on-profiles-created="{{onResourcesCreated}}"></profile-service>
+      baseUrl="{{baseUrl}}"></profile-service>
 
     <content></content>
 
@@ -74,24 +68,6 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        * Fired when initialization of privates is completed.
        *
        * @event init-ready
-       */
-
-      /**
-       * Fired when the event list has been loaded by the Event resource service.
-       *
-       * @event pta-events-loaded
-       */
-
-      /**
-       * Fired when the product list has been loaded by the Product resource service.
-       *
-       * @event pta-products-loaded
-       */
-
-      /**
-       * Fired when the location list has been loaded by the Location resource service.
-       *
-       * @event pta-locations-loaded
        */
 
       ready: function() {
@@ -111,16 +87,6 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
         this.authToken = btoa(this.appId + ':' + this.appSecret);
         this.baseUrl = event.detail.response.baseUrl;
         this.fire('init-ready');
-      },
-
-      onResourcesLoaded: function(event) {
-        eventName = 'pta-' + event.currentTarget.resource + '-loaded';
-        this.fire(eventName, event.detail);
-      },
-
-      onResourcesCreated: function(event) {
-        eventName = 'pta-' + event.currentTarget.resource + '-created';
-        this.fire(eventName, event.detail);
       }
 
     });
