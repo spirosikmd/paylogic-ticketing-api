@@ -135,7 +135,7 @@
         var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
 
         // Initialization of privates is completed.
-        pta.addEventListener('init-ready', function() {
+        document.addEventListener('init-ready', function() {
           // Use the event uri to get a specific event.
           pta.events.get(eventUri);
 
@@ -180,56 +180,56 @@
         });
 
         // Event service has loaded the event with the requested uid.
-        pta.addEventListener('events-loaded', function(e) {
+        document.addEventListener('events-loaded', function(e) {
           document.querySelector('#event-template').model = {
             events: e.detail
           };
         });
 
         // Product service has loaded the products from the specified event.
-        pta.addEventListener('products-loaded', function(e) {
+        document.addEventListener('products-loaded', function(e) {
           document.querySelector('#products-template').model = {
             products: e.detail
           };
         });
 
         // Merchant service has loaded the merchants.
-        pta.addEventListener('merchants-loaded', function(e) {
+        document.addEventListener('merchants-loaded', function(e) {
           document.querySelector('#merchants-template').model = {
             merchants: e.detail
           };
         });
 
         // Profile service has created a profile.
-        pta.addEventListener('profiles-created', function(e) {
+        document.addEventListener('profiles-created', function(e) {
           document.querySelector('#created-profile-template').model = {
             profiles: e.detail
           };
         });
 
         // Profile service has updated a profile.
-        pta.addEventListener('profiles-updated', function(e) {
+        document.addEventListener('profiles-updated', function(e) {
           document.querySelector('#updated-profile-template').model = {
             profiles: e.detail
           };
         });
 
         // Profile service has loaded the profiles.
-        pta.addEventListener('profiles-loaded', function(e) {
+        document.addEventListener('profiles-loaded', function(e) {
           document.querySelector('#profiles-template').model = {
             profiles: e.detail
           };
         });
 
         // Location service has loaded the locations.
-        pta.addEventListener('locations-loaded', function(e) {
+        document.addEventListener('locations-loaded', function(e) {
           document.querySelector('#locations-template').model = {
             locations: e.detail
           };
         });
 
         // Basket service has created a basket.
-        pta.addEventListener('baskets-created', function(e) {
+        document.addEventListener('baskets-created', function(e) {
           console.log("Basket created: ", e.detail[0]);
           var basketUri = e.detail[0].uri;
           // Delete a basket after it has been created.
@@ -239,7 +239,7 @@
         });
 
         // Basket service has deleted a basket.
-        pta.addEventListener('baskets-deleted', function(e) {
+        document.addEventListener('baskets-deleted', function(e) {
           console.log("Basket deleted: ", e.detail[0]);
         });
       });
