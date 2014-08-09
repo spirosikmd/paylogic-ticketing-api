@@ -126,98 +126,124 @@
   </div>
 
   <script>
-    document.addEventListener('polymer-ready', function() {
-      var pta = document.querySelector('paylogic-ticketing-api');
+    (function() {
+      'use-strict';
 
-      var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
+      document.addEventListener('polymer-ready', function() {
+        var pta = document.querySelector('paylogic-ticketing-api');
 
-      // Initialization of privates is completed.
-      pta.addEventListener('init-ready', function() {
-        // Use the event uri to get a specific event.
-        pta.events.get(eventUri);
+        var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
 
-        // Use the event uri to get products for a specific event.
-        pta.products.filter({"event": eventUri});
+        // Initialization of privates is completed.
+        pta.addEventListener('init-ready', function() {
+          // Use the event uri to get a specific event.
+          pta.events.get(eventUri);
 
-        // Get a list of merchants.
-        pta.merchants.get();
+          // Use the event uri to get products for a specific event.
+          pta.products.filter({"event": eventUri});
 
-        // Get a list of profiles.
-        pta.profiles.get();
+          // Get a list of merchants.
+          pta.merchants.get();
 
-        // Create a profile.
-        pta.profiles.create({
-          "country": "NL",
-          "date_of_birth": "1976-06-04",
-          "email": "marc@example.com",
-          "first_name": "Marc",
-          "gender": 1,
-          "last_name": "Legend"
+          // Get a list of profiles.
+          pta.profiles.get();
+
+          // Create a profile.
+          pta.profiles.create({
+            "country": "NL",
+            "date_of_birth": "1976-06-04",
+            "email": "marc@example.com",
+            "first_name": "Marc",
+            "gender": 1,
+            "last_name": "Legend"
+          });
+
+          var profileUri = "https://ticketapi.sandbox.paylogic.com/profiles/a2107be0765e480fa7c639775e4f9444";
+
+          // Update a profile.
+          pta.profiles.update({
+            profileUri: profileUri,
+            data: {
+              "email": "nick@example.com"
+            }
+          });
+
+          // Get a list of locations.
+          pta.locations.get();
+
+          var profileRevisionUri = "https://ticketapi.sandbox.paylogic.com/profiles/55e0681f784b42f08b97ad2c411cc8b5/revisions/f328e348c28347089078cdc285e9e4ce";
+
+          // Create a basket with a profile.
+          pta.baskets.create({
+            profile: profileRevisionUri
+          });
         });
 
-        var profileUri = "https://ticketapi.sandbox.paylogic.com/profiles/a2107be0765e480fa7c639775e4f9444";
-
-        // Update a profile.
-        pta.profiles.update({
-          profileUri: profileUri,
-          data: {
-            "email": "nick@example.com"
-          }
+        // Event service has completed loading the event with the requested uid.
+        pta.addEventListener('events-loaded', function(e) {
+          document.querySelector('#event-template').model = {
+            events: e.detail
+          };
         });
 
-        // Get a list of locations.
-        pta.locations.get();
-      });
+        // Product service has completed loading the products from the specified event.
+        pta.addEventListener('products-loaded', function(e) {
+          document.querySelector('#products-template').model = {
+            products: e.detail
+          };
+        });
 
-      // Event service has completed loading the event with the requested uid.
-      pta.addEventListener('events-loaded', function(e) {
-        document.querySelector('#event-template').model = {
-          events: e.detail
-        };
-      });
+        // Merchant service has completed loading the merchants.
+        pta.addEventListener('merchants-loaded', function(e) {
+          document.querySelector('#merchants-template').model = {
+            merchants: e.detail
+          };
+        });
 
-      // Product service has completed loading the products from the specified event.
-      pta.addEventListener('products-loaded', function(e) {
-        document.querySelector('#products-template').model = {
-          products: e.detail
-        };
-      });
+        // Profile service has completed creating a profile.
+        pta.addEventListener('profiles-created', function(e) {
+          document.querySelector('#created-profile-template').model = {
+            profiles: e.detail
+          };
+        });
 
-      // Merchant service has completed loading the merchants.
-      pta.addEventListener('merchants-loaded', function(e) {
-        document.querySelector('#merchants-template').model = {
-          merchants: e.detail
-        };
-      });
+        // Profile service has completed updating a profile.
+        pta.addEventListener('profiles-updated', function(e) {
+          document.querySelector('#updated-profile-template').model = {
+            profiles: e.detail
+          };
+        });
 
-      // Profile service has completed creating a profile.
-      pta.addEventListener('profiles-created', function(e) {
-        document.querySelector('#created-profile-template').model = {
-          profiles: e.detail
-        };
-      });
+        // Profile service has completed loading the profiles.
+        pta.addEventListener('profiles-loaded', function(e) {
+          document.querySelector('#profiles-template').model = {
+            profiles: e.detail
+          };
+        });
 
-      // Profile service has completed updating a profile.
-      pta.addEventListener('profiles-updated', function(e) {
-        document.querySelector('#updated-profile-template').model = {
-          profiles: e.detail
-        };
-      });
+        // Location service has completed loading the locations.
+        pta.addEventListener('locations-loaded', function(e) {
+          document.querySelector('#locations-template').model = {
+            locations: e.detail
+          };
+        });
 
-      // Profile service has completed loading the profiles.
-      pta.addEventListener('profiles-loaded', function(e) {
-        document.querySelector('#profiles-template').model = {
-          profiles: e.detail
-        };
-      });
+        // Location service has completed loading the locations.
+        pta.addEventListener('baskets-created', function(e) {
+          console.log("Basket created: ", e.detail[0]);
+          var basketUri = e.detail[0].uri;
+          // Delete a basket after created.
+          pta.baskets.delete({
+            basketUri: basketUri
+          });
+        });
 
-      // Location service has completed loading the locations.
-      pta.addEventListener('locations-loaded', function(e) {
-        document.querySelector('#locations-template').model = {
-          locations: e.detail
-        };
+        // Location service has completed loading the locations.
+        pta.addEventListener('baskets-deleted', function(e) {
+          console.log("Basket deleted: ", e.detail[0]);
+        });
       });
-    });
+    })();
   </script>
 
 </body>

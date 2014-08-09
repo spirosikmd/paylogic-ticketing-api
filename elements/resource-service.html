@@ -51,6 +51,16 @@ ajax functionality and other common actions between resources.
       handleAs="json"
       on-core-response="{{onResponse}}"></core-ajax>
 
+    <core-ajax
+      id="ajaxDELETE"
+      method="DELETE"
+      url="{{baseUrl}}{{resource}}{{resourceUid}}"
+      params="{{params}}"
+      headers='{"Authorization": "Basic {{authToken}}"}'
+      contentType="application/json"
+      handleAs="json"
+      on-core-response="{{onResponse}}"></core-ajax>
+
   </template>
 
   <script>
@@ -88,7 +98,8 @@ ajax functionality and other common actions between resources.
       eventsMethodsMap: {
         'GET': '-loaded',
         'POST': '-created',
-        'PUT': '-updated'
+        'PUT': '-updated',
+        'DELETE': '-deleted'
       },
 
       getResourceUid: function(resourceUri) {
