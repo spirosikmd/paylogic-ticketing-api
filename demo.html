@@ -179,56 +179,56 @@
           });
         });
 
-        // Event service has completed loading the event with the requested uid.
+        // Event service has loaded the event with the requested uid.
         pta.addEventListener('events-loaded', function(e) {
           document.querySelector('#event-template').model = {
             events: e.detail
           };
         });
 
-        // Product service has completed loading the products from the specified event.
+        // Product service has loaded the products from the specified event.
         pta.addEventListener('products-loaded', function(e) {
           document.querySelector('#products-template').model = {
             products: e.detail
           };
         });
 
-        // Merchant service has completed loading the merchants.
+        // Merchant service has loaded the merchants.
         pta.addEventListener('merchants-loaded', function(e) {
           document.querySelector('#merchants-template').model = {
             merchants: e.detail
           };
         });
 
-        // Profile service has completed creating a profile.
+        // Profile service has created a profile.
         pta.addEventListener('profiles-created', function(e) {
           document.querySelector('#created-profile-template').model = {
             profiles: e.detail
           };
         });
 
-        // Profile service has completed updating a profile.
+        // Profile service has updated a profile.
         pta.addEventListener('profiles-updated', function(e) {
           document.querySelector('#updated-profile-template').model = {
             profiles: e.detail
           };
         });
 
-        // Profile service has completed loading the profiles.
+        // Profile service has loaded the profiles.
         pta.addEventListener('profiles-loaded', function(e) {
           document.querySelector('#profiles-template').model = {
             profiles: e.detail
           };
         });
 
-        // Location service has completed loading the locations.
+        // Location service has loaded the locations.
         pta.addEventListener('locations-loaded', function(e) {
           document.querySelector('#locations-template').model = {
             locations: e.detail
           };
         });
 
-        // Location service has completed loading the locations.
+        // Basket service has created a basket.
         pta.addEventListener('baskets-created', function(e) {
           console.log("Basket created: ", e.detail[0]);
           var basketUri = e.detail[0].uri;
@@ -238,7 +238,7 @@
           });
         });
 
-        // Location service has completed loading the locations.
+        // Basket service has deleted a basket.
         pta.addEventListener('baskets-deleted', function(e) {
           console.log("Basket deleted: ", e.detail[0]);
         });
