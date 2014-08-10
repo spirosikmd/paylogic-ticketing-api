@@ -1,0 +1,107 @@
+<!--
+Element which encapsulates the functionality for the Ticket resource of the Paylogic Ticketing API.
+
+##### Example
+
+    <ticket-service
+      id="tickets-service"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"></ticket-service>
+
+@element ticket-service
+@blurb Element which encapsulates the functionality for the Ticket resource of the Paylogic Ticketing API.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="resource-service.html">
+
+<polymer-element name="ticket-service" extends="resource-service" hidden>
+
+  <script>
+
+    Polymer('ticket-service', {
+
+      /**
+       * Fired when the tickets have been loaded from the API. Inherited from resource-service element.
+       *
+       * @event tickets-loaded
+       */
+
+       /**
+       * Fired when a ticket has been created. Inherited from resource-service element.
+       *
+       * @event tickets-created
+       */
+
+       /**
+       * Fired when a ticket has been updated. Inherited from resource-service element.
+       *
+       * @event tickets-updated
+       */
+
+       /**
+       * Fired when a ticket has been deleted. Inherited from resource-service element.
+       *
+       * @event tickets-deleted
+       */
+
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default tickets
+       */
+      resource: 'tickets',
+
+      /**
+       * Creates tickets.
+       *
+       * @method create
+       * @param {Array} params
+       *    @param {Object} params[0]
+       *       @param {String} params[0].basket The uri of the basket to create the ticket for.
+       *       @param {String} params[0].product The uri of the product to create the ticket for.
+       */
+      create: function(params) {
+        if (params !== undefined) {
+          this.$.ajaxPOST.xhrArgs = {
+            body: JSON.stringify(params)
+          };
+        }
+        this.$.ajaxPOST.go();
+      },
+
+      /**
+       * Updates a ticket.
+       *
+       * @method update
+       * @param {Object} params
+       *    @param {String} params.ticketUri The uri of the ticket to update.
+       *    @param {Object} params.data The ticket data to update.
+       */
+      update: function(params) {
+        this.resourceUid = this.getResourceUid(params.ticketUri)
+        this.$.ajaxPUT.xhrArgs = {
+          body: JSON.stringify(params.data)
+        };
+        this.$.ajaxPUT.go();
+      },
+
+      /**
+       * Deletes a ticket.
+       *
+       * @method delete
+       * @param {String} ticketUri The uri of the ticket to delete.
+       */
+      delete: function(ticketUri) {
+        this.resourceUid = this.getResourceUid(ticketUri)
+        this.$.ajaxDELETE.go();
+      },
+
+    });
+
+  </script>
+
+</polymer-element>

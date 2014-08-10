@@ -126,6 +126,28 @@
   </div>
 
   <div>
+    <h1>List of payment methods</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Fee</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template id="paymentmethods-template" repeat="{{paymentmethods}}">
+          <tr>
+            <td>{{name}}</td>
+            <td>{{description.en}}</td>
+            <td>{{fee}}</td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+  </div>
+
+  <div>
     <h1>List of baskets for a specified profile</h1>
     <table>
       <thead>
@@ -149,6 +171,7 @@
 
       document.addEventListener('polymer-ready', function() {
         var pta = document.querySelector('paylogic-ticketing-api');
+        var basketUri = "";
 
         // Initialization of privates is completed.
         document.addEventListener('init-ready', function() {
@@ -189,9 +212,12 @@
           // Get a list of locations.
           pta.locations.get();
 
-          var profileRevisionUri = "https://ticketapi.sandbox.paylogic.com/profiles/55e0681f784b42f08b97ad2c411cc8b5/revisions/f328e348c28347089078cdc285e9e4ce";
+          // Get a list of payment methods.
+          pta.paymentmethods.get();
 
           // Create a basket with a profile.
+          var profileRevisionUri = "https://ticketapi.sandbox.paylogic.com/profiles/55e0681f784b42f08b97ad2c411cc8b5/revisions/f328e348c28347089078cdc285e9e4ce";
+
           pta.baskets.create({
             profile: profileRevisionUri
           });
@@ -199,7 +225,7 @@
           // Filter baskets on profile.
           pta.baskets.filter({
             profile: profileRevisionUri
-          })
+          });
         });
 
         // Event service has loaded the event with the requested uid.
@@ -251,12 +277,28 @@
           };
         });
 
+        // Paymentmethod service has loaded the payment methods.
+        document.addEventListener('paymentmethods-loaded', function(e) {
+          document.querySelector('#paymentmethods-template').model = {
+            paymentmethods: e.detail
+          };
+        });
+
         // Basket service has created a basket.
         document.addEventListener('baskets-created', function(e) {
           console.log("Basket created: ", e.detail[0]);
-          var basketUri = e.detail[0].uri;
-          // Delete a basket after it has been created.
-          pta.baskets.delete(basketUri);
+          basketUri = e.detail[0].uri;
+
+          // Create many tickets.
+          var productUri = "https://ticketapi.sandbox.paylogic.com/products/30df20dd0b0e4bc58f0663edc8a4f640";
+
+          pta.tickets.create([{
+            "basket": basketUri,
+            "product": productUri
+          }, {
+            "basket": basketUri,
+            "product": productUri
+          }]);
         });
 
         // Basket service has deleted a basket.
@@ -269,6 +311,24 @@
           document.querySelector('#baskets-template').model = {
             baskets: e.detail
           };
+        });
+
+        // Ticket service has created the tickets.
+        document.addEventListener('tickets-created', function(e) {
+          console.log("Tickets created: ", e.detail);
+
+          // Create an order after tickets have been created.
+          var paymentmethodUri = "https://ticketapi.sandbox.paylogic.com/paymentmethods/d21d1ca055b6404085d81dce5977f954";
+
+          pta.orders.create({
+            basket: basketUri,
+            paymentmethod: paymentmethodUri
+          });
+        });
+
+        // Order service has created the order.
+        document.addEventListener('orders-created', function(e) {
+          console.log("Order created: ", e.detail[0]);
         });
       });
     })();

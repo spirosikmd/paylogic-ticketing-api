@@ -1,0 +1,63 @@
+<!--
+Element which encapsulates the functionality for the PaymentMethod resource of the Paylogic Ticketing API.
+
+##### Example
+
+    <paymentmethod-service
+      id="paymentmethods-service"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"></paymentmethod-service>
+
+@element paymentmethod-service
+@blurb Element which encapsulates the functionality for the PaymentMethod resource of the Paylogic Ticketing API.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../core-ajax/core-ajax.html">
+<link rel="import" href="resource-service.html">
+
+<polymer-element name="paymentmethod-service" extends="resource-service" hidden>
+
+  <script>
+
+    Polymer('paymentmethod-service', {
+
+      /**
+       * Fired when the paymentmethods have been loaded from the API. Inherited from resource-service element.
+       *
+       * @event paymentmethods-loaded
+       */
+
+       /**
+       * Fired when a quote for a basket and a paymentmethod has been loaded. Inherited from resource-service element.
+       *
+       * @event paymentmethods-quotes-loaded
+       */
+
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default paymentmethods
+       */
+      resource: 'paymentmethods',
+
+      /**
+       * Gets the payment methods quotes for a basket.
+       *
+       * @method quotes
+       * @param {Object} params
+       *    @param {String} params.basket The uri of the basket to get the quotes for.
+       */
+      quotes: function(params) {
+        this.params = params;
+        this.$.ajaxGET.go();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

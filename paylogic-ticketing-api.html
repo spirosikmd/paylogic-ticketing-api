@@ -20,6 +20,8 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
 <link rel="import" href="elements/profile-service.html">
 <link rel="import" href="elements/basket-service.html">
 <link rel="import" href="elements/order-service.html">
+<link rel="import" href="elements/paymentmethod-service.html">
+<link rel="import" href="elements/ticket-service.html">
 
 <polymer-element name="paylogic-ticketing-api" hidden>
 
@@ -65,6 +67,16 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       id="orders-service"
       authToken="{{authToken}}"
       baseUrl="{{baseUrl}}"></order-service>
+
+    <paymentmethod-service
+      id="paymentmethods-service"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"></paymentmethod-service>
+
+    <ticket-service
+      id="tickets-service"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"></ticket-service>
 
     <content></content>
 
