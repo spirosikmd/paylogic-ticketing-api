@@ -46,7 +46,7 @@ document.addEventListener('polymer-ready', function() {
     pta.products.filter({"event": "<event_uri>"});
   });
 
-  // Event service has completed loading the event with the requested uid.
+  // Event service has completed loading the event with the requested uri.
   pta.addEventListener('events-loaded', function(e) {
     console.log(e.detail);
   });
