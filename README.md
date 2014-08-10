@@ -1,7 +1,7 @@
 paylogic-ticketing-api
 ================
 
-It includes a polymer element which encapsulates the functionality provided by the
+A polymer element which encapsulates the functionality provided by the
 [Paylogic Ticketing API.](https://doc.sandbox.paylogic.com/)
 
 ## Setup
