@@ -12,7 +12,7 @@
 
   <paylogic-ticketing-api></paylogic-ticketing-api>
 
-  <template id="event-template" repeat="{{events}}">
+  <template id="event-template" bind="{{event}}">
     <h1>{{title.en}}</h1>
     <h2>{{subtitle.en}}</h2>
     <p>{{description.en}}</p>
@@ -170,24 +170,54 @@
       'use-strict';
 
       document.addEventListener('polymer-ready', function() {
+
         var pta = document.querySelector('paylogic-ticketing-api');
         var basketUri = "";
 
         // Initialization of privates is completed.
         document.addEventListener('init-ready', function() {
-          var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
 
           // Use the event uri to get a specific event.
-          pta.events.get(eventUri);
+          var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
 
-          // Use the event uri to get products for a specific event.
-          pta.products.filter({"event": eventUri});
+          pta.events.get(eventUri).then(function(response) {
+            // Create the event object from the response.
+            var event = JSON.parse(response);
+
+            document.querySelector('#event-template').model = {
+              event: event
+            };
+
+            // Use the event uri to get products for this specific event.
+            pta.products.filter({"event": event.uri}).then(function(response) {
+              document.querySelector('#products-template').model = {
+                products: JSON.parse(response)
+              };
+            }, function(error) {
+              console.error(error);
+            });
+
+          }, function(error) {
+            console.error(error);
+          });
 
           // Get a list of merchants.
-          pta.merchants.get();
+          pta.merchants.get().then(function(response) {
+            document.querySelector('#merchants-template').model = {
+              merchants: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
+          });
 
           // Get a list of profiles.
-          pta.profiles.get();
+          pta.profiles.get().then(function(response) {
+            document.querySelector('#profiles-template').model = {
+              profiles: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
+          });
 
           // Create a profile.
           pta.profiles.create({
@@ -199,9 +229,9 @@
             "last_name": "Legend"
           });
 
+          // Update a profile.
           var profileUri = "https://ticketapi.sandbox.paylogic.com/profiles/a2107be0765e480fa7c639775e4f9444";
 
-          // Update a profile.
           pta.profiles.update({
             profileUri: profileUri,
             data: {
@@ -210,10 +240,22 @@
           });
 
           // Get a list of locations.
-          pta.locations.get();
+          pta.locations.get().then(function(response) {
+            document.querySelector('#locations-template').model = {
+              locations: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
+          });
 
           // Get a list of payment methods.
-          pta.paymentmethods.get();
+          pta.paymentmethods.get().then(function(response) {
+            document.querySelector('#paymentmethods-template').model = {
+              paymentmethods: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
+          });
 
           // Create a basket with a profile.
           var profileRevisionUri = "https://ticketapi.sandbox.paylogic.com/profiles/55e0681f784b42f08b97ad2c411cc8b5/revisions/f328e348c28347089078cdc285e9e4ce";
@@ -225,28 +267,13 @@
           // Filter baskets on profile.
           pta.baskets.filter({
             profile: profileRevisionUri
+          }).then(function(response) {
+            document.querySelector('#baskets-template').model = {
+              baskets: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
           });
-        });
-
-        // Event service has loaded the event with the requested uid.
-        document.addEventListener('events-loaded', function(e) {
-          document.querySelector('#event-template').model = {
-            events: e.detail
-          };
-        });
-
-        // Product service has loaded the products from the specified event.
-        document.addEventListener('products-loaded', function(e) {
-          document.querySelector('#products-template').model = {
-            products: e.detail
-          };
-        });
-
-        // Merchant service has loaded the merchants.
-        document.addEventListener('merchants-loaded', function(e) {
-          document.querySelector('#merchants-template').model = {
-            merchants: e.detail
-          };
         });
 
         // Profile service has created a profile.
@@ -260,27 +287,6 @@
         document.addEventListener('profiles-updated', function(e) {
           document.querySelector('#updated-profile-template').model = {
             profiles: e.detail
-          };
-        });
-
-        // Profile service has loaded the profiles.
-        document.addEventListener('profiles-loaded', function(e) {
-          document.querySelector('#profiles-template').model = {
-            profiles: e.detail
-          };
-        });
-
-        // Location service has loaded the locations.
-        document.addEventListener('locations-loaded', function(e) {
-          document.querySelector('#locations-template').model = {
-            locations: e.detail
-          };
-        });
-
-        // Paymentmethod service has loaded the payment methods.
-        document.addEventListener('paymentmethods-loaded', function(e) {
-          document.querySelector('#paymentmethods-template').model = {
-            paymentmethods: e.detail
           };
         });
 
@@ -304,13 +310,6 @@
         // Basket service has deleted a basket.
         document.addEventListener('baskets-deleted', function(e) {
           console.log("Basket deleted: ", e.detail[0]);
-        });
-
-        // Basket service has loaded the baskets with specified profile.
-        document.addEventListener('baskets-loaded', function(e) {
-          document.querySelector('#baskets-template').model = {
-            baskets: e.detail
-          };
         });
 
         // Ticket service has created the tickets.
