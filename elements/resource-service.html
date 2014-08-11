@@ -114,14 +114,35 @@ ajax functionality and other common actions between resources.
         this.fire(eventName, response);
       },
 
+      promise: function(ajax) {
+        return new Promise(function(resolve, reject) {
+          var req = ajax.go();
+          req.onload = function() {
+            // This is called even on 404 etc so check the status.
+            if (req.status == 200) {
+              // Resolve the promise with the response text.
+              resolve(req.response);
+            }
+            else {
+              // Otherwise reject with the status text which will hopefully be a meaningful error.
+              reject(Error(req.statusText));
+            }
+          };
+          // Handle network errors
+          req.onerror = function() {
+            reject(Error("Network Error"));
+          };
+        });
+      },
+
       get: function(resourceUri) {
         this.resourceUid = this.getResourceUid(resourceUri);
-        this.$.ajaxGET.go();
+        return this.promise(this.$.ajaxGET);
       },
 
       filter: function(params) {
         this.params = params;
-        this.$.ajaxGET.go();
+        return this.promise(this.$.ajaxGET);
       }
 
     });
