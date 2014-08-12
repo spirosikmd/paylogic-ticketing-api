@@ -1,10 +1,8 @@
 <!--
-Element which is meant to be extended by the service elements. It provides the
-ajax functionality and other common actions between resources.
+Element which encapsulates the functionality for the PaymentMethod quote subresource of the Paylogic Ticketing API.
 
-@element resource-service
-@blurb Element which is meant to be extended by the service elements. It
-  provides the ajax functionality and other common actions between resources.
+@element quote-service
+@blurb Element which encapsulates the functionality for the PaymentMethod quote subresource of the Paylogic Ticketing API.
 @status alpha
 -->
 
@@ -31,11 +29,11 @@ ajax functionality and other common actions between resources.
     Polymer('quote-service', {
 
       /**
-       * The type of the resource.
+       * The type of the subresource.
        *
-       * @attribute resource
+       * @attribute subresource
        * @type string
-       * @default paymentmethods
+       * @default /quotes
        */
       subresource: '/quotes',
 
