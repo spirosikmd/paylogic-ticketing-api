@@ -1,0 +1,46 @@
+<!--
+Element which is meant to be extended by the service elements. It provides the
+ajax functionality and other common actions between resources.
+
+@element resource-service
+@blurb Element which is meant to be extended by the service elements. It
+  provides the ajax functionality and other common actions between resources.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../core-ajax/core-ajax.html">
+
+<polymer-element name="ajax-promise" extends="core-ajax" hidden>
+
+  <script>
+
+    Polymer('ajax-promise', {
+
+      request: function() {
+        var _this = this;
+        return new Promise(function(resolve, reject) {
+          var req = _this.go();
+          req.onload = function() {
+            // This is called even on 404 etc so check the status.
+            if (req.status === 200 || req.status === 201) {
+              // Resolve the promise with the response text.
+              resolve(req.response);
+            }
+            else {
+              // Otherwise reject with the status text which will hopefully be a meaningful error.
+              reject(Error(req.statusText));
+            }
+          };
+          // Handle network errors
+          req.onerror = function() {
+            reject(Error("Network Error"));
+          };
+        });
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

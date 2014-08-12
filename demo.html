@@ -63,7 +63,7 @@
 
   <div>
     <h1>Info about created profile</h1>
-    <template id="created-profile-template" repeat="{{profiles}}">
+    <template id="created-profile-template" bind="{{profile}}">
       <dl>
         <dt>Email</dt>
           <dd>{{email}}</dd>
@@ -83,7 +83,7 @@
 
   <div>
     <h1>Info about updated profile</h1>
-    <template id="updated-profile-template" repeat="{{profiles}}">
+    <template id="updated-profile-template" bind="{{profile}}">
       <dl>
         <dt>Email</dt>
           <dd>{{email}}</dd>
@@ -227,6 +227,12 @@
             "first_name": "Marc",
             "gender": 1,
             "last_name": "Legend"
+          }).then(function(response) {
+            document.querySelector('#created-profile-template').model = {
+              profile: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
           });
 
           // Update a profile.
@@ -237,6 +243,12 @@
             data: {
               "email": "nick@example.com"
             }
+          }).then(function(response) {
+            document.querySelector('#updated-profile-template').model = {
+              profile: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
           });
 
           // Get a list of locations.
@@ -262,6 +274,40 @@
 
           pta.baskets.create({
             profile: profileRevisionUri
+          }).then(function(response) {
+            var basket = JSON.parse(response);
+            console.log("Basket created: ", basket);
+
+            // Create many tickets.
+            var productUri = "https://ticketapi.sandbox.paylogic.com/products/30df20dd0b0e4bc58f0663edc8a4f640";
+
+            pta.tickets.create([{
+              "basket": basket.uri,
+              "product": productUri
+            }, {
+              "basket": basket.uri,
+              "product": productUri
+            }]).then(function(response) {
+              var tickets = JSON.parse(response);
+              console.log("Tickets created: ", tickets);
+
+              // Create an order after tickets have been created.
+              var paymentmethodUri = "https://ticketapi.sandbox.paylogic.com/paymentmethods/d21d1ca055b6404085d81dce5977f954";
+
+              pta.orders.create({
+                basket: basket.uri,
+                paymentmethod: paymentmethodUri
+              }).then(function(response) {
+                var order = JSON.parse(response);
+                console.log("Order created: ", order);
+              }, function(error) {
+                console.error(error);
+              });
+            }, function(error) {
+              console.error(error);
+            });
+          }, function(error) {
+            console.error(error);
           });
 
           // Filter baskets on profile.
@@ -276,60 +322,8 @@
           });
         });
 
-        // Profile service has created a profile.
-        document.addEventListener('profiles-created', function(e) {
-          document.querySelector('#created-profile-template').model = {
-            profiles: e.detail
-          };
-        });
-
-        // Profile service has updated a profile.
-        document.addEventListener('profiles-updated', function(e) {
-          document.querySelector('#updated-profile-template').model = {
-            profiles: e.detail
-          };
-        });
-
-        // Basket service has created a basket.
-        document.addEventListener('baskets-created', function(e) {
-          console.log("Basket created: ", e.detail[0]);
-          basketUri = e.detail[0].uri;
-
-          // Create many tickets.
-          var productUri = "https://ticketapi.sandbox.paylogic.com/products/30df20dd0b0e4bc58f0663edc8a4f640";
-
-          pta.tickets.create([{
-            "basket": basketUri,
-            "product": productUri
-          }, {
-            "basket": basketUri,
-            "product": productUri
-          }]);
-        });
-
-        // Basket service has deleted a basket.
-        document.addEventListener('baskets-deleted', function(e) {
-          console.log("Basket deleted: ", e.detail[0]);
-        });
-
-        // Ticket service has created the tickets.
-        document.addEventListener('tickets-created', function(e) {
-          console.log("Tickets created: ", e.detail);
-
-          // Create an order after tickets have been created.
-          var paymentmethodUri = "https://ticketapi.sandbox.paylogic.com/paymentmethods/d21d1ca055b6404085d81dce5977f954";
-
-          pta.orders.create({
-            basket: basketUri,
-            paymentmethod: paymentmethodUri
-          });
-        });
-
-        // Order service has created the order.
-        document.addEventListener('orders-created', function(e) {
-          console.log("Order created: ", e.detail[0]);
-        });
       });
+
     })();
   </script>
 

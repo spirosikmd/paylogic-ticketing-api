@@ -23,18 +23,6 @@ Element which encapsulates the functionality for the Order resource of the Paylo
     Polymer('order-service', {
 
       /**
-       * Fired when the orders have been loaded from the API. Inherited from resource-service element.
-       *
-       * @event orders-loaded
-       */
-
-       /**
-       * Fired when a order has been created. Inherited from resource-service element.
-       *
-       * @event orders-created
-       */
-
-      /**
        * The type of the resource.
        *
        * @attribute resource
@@ -55,7 +43,7 @@ Element which encapsulates the functionality for the Order resource of the Paylo
         this.$.ajaxPOST.xhrArgs = {
           body: JSON.stringify(params)
         };
-        this.$.ajaxPOST.go();
+        return this.$.ajaxPOST.request();
       }
 
     });

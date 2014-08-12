@@ -23,24 +23,6 @@ Element which encapsulates the functionality for the Profile resource of the Pay
     Polymer('profile-service', {
 
       /**
-       * Fired when the profiles have been loaded from the API. Inherited from resource-service element.
-       *
-       * @event profiles-loaded
-       */
-
-       /**
-       * Fired when a profile has been created. Inherited from resource-service element.
-       *
-       * @event profiles-created
-       */
-
-       /**
-       * Fired when a profile has been updated. Inherited from resource-service element.
-       *
-       * @event profiles-updated
-       */
-
-      /**
        * The type of the resource.
        *
        * @attribute resource
@@ -53,7 +35,7 @@ Element which encapsulates the functionality for the Profile resource of the Pay
         this.$.ajaxPOST.xhrArgs = {
           body: JSON.stringify(params)
         };
-        this.$.ajaxPOST.go();
+        return this.$.ajaxPOST.request();
       },
 
       update: function(params) {
@@ -61,7 +43,7 @@ Element which encapsulates the functionality for the Profile resource of the Pay
         this.$.ajaxPUT.xhrArgs = {
           body: JSON.stringify(params.data)
         };
-        this.$.ajaxPUT.go();
+        return this.$.ajaxPUT.request();
       }
 
     });

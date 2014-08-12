@@ -23,30 +23,6 @@ Element which encapsulates the functionality for the Basket resource of the Payl
     Polymer('basket-service', {
 
       /**
-       * Fired when the baskets have been loaded from the API. Inherited from resource-service element.
-       *
-       * @event baskets-loaded
-       */
-
-       /**
-       * Fired when a basket has been created. Inherited from resource-service element.
-       *
-       * @event baskets-created
-       */
-
-       /**
-       * Fired when a basket has been updated. Inherited from resource-service element.
-       *
-       * @event baskets-updated
-       */
-
-       /**
-       * Fired when a basket has been deleted. Inherited from resource-service element.
-       *
-       * @event baskets-deleted
-       */
-
-      /**
        * The type of the resource.
        *
        * @attribute resource
@@ -68,7 +44,7 @@ Element which encapsulates the functionality for the Basket resource of the Payl
             body: JSON.stringify(params)
           };
         }
-        this.$.ajaxPOST.go();
+        return this.$.ajaxPOST.request();
       },
 
       /**
@@ -84,7 +60,7 @@ Element which encapsulates the functionality for the Basket resource of the Payl
         this.$.ajaxPUT.xhrArgs = {
           body: JSON.stringify(params.data)
         };
-        this.$.ajaxPUT.go();
+        return this.$.ajaxPUT.request();
       },
 
       /**
@@ -95,7 +71,7 @@ Element which encapsulates the functionality for the Basket resource of the Payl
        */
       delete: function(basketUri) {
         this.resourceUid = this.getResourceUid(basketUri)
-        this.$.ajaxDELETE.go();
+        return this.$.ajaxDELETE.request();
       },
 
     });
