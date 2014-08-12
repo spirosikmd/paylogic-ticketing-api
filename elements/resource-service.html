@@ -9,92 +9,53 @@ ajax functionality and other common actions between resources.
 -->
 
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../core-ajax/core-ajax.html">
+<link rel="import" href="ajax-promise.html">
 
 <polymer-element name="resource-service" attributes="resource baseUrl authToken" hidden>
 
   <template>
 
-    <core-ajax
+    <ajax-promise
       id="ajaxGET"
       method="GET"
       url="{{baseUrl}}{{resource}}{{resourceUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       contentType="application/json"
-      handleAs="json"
-      on-core-response="{{onResponse}}"></core-ajax>
+      handleAs="json"></ajax-promise>
 
-    <core-ajax
+    <ajax-promise
       id="ajaxPOST"
       method="POST"
       url="{{baseUrl}}{{resource}}{{resourceUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       contentType="application/json"
-      handleAs="json"
-      on-core-response="{{onResponse}}"></core-ajax>
+      handleAs="json"></ajax-promise>
 
-    <core-ajax
+    <ajax-promise
       id="ajaxPUT"
       method="PUT"
       url="{{baseUrl}}{{resource}}{{resourceUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       contentType="application/json"
-      handleAs="json"
-      on-core-response="{{onResponse}}"></core-ajax>
+      handleAs="json"></ajax-promise>
 
-    <core-ajax
+    <ajax-promise
       id="ajaxDELETE"
       method="DELETE"
       url="{{baseUrl}}{{resource}}{{resourceUid}}"
       params="{{params}}"
       headers='{"Authorization": "Basic {{authToken}}"}'
       contentType="application/json"
-      handleAs="json"
-      on-core-response="{{onResponse}}"></core-ajax>
+      handleAs="json"></ajax-promise>
 
   </template>
 
   <script>
 
     Polymer('resource-service', {
-
-      /**
-       * Fired when the requested resource(s) has been loaded from the API.
-       *
-       * Examples:
-       *   events-loaded
-       *   products-loaded
-       *
-       * @event <resource>-loaded
-       */
-
-       /**
-       * Fired when a resource has been created.
-       *
-       * Examples:
-       *   profiles-created
-       *
-       * @event <resource>-created
-       */
-
-       /**
-       * Fired when a resource has been updated.
-       *
-       * Examples:
-       *   profiles-updated
-       *
-       * @event <resource>-updated
-       */
-
-      eventsMethodsMap: {
-        'GET': '-loaded',
-        'POST': '-created',
-        'PUT': '-updated',
-        'DELETE': '-deleted'
-      },
 
       getResourceUid: function(resourceUri) {
         var resourceUid = undefined;
@@ -104,45 +65,14 @@ ajax functionality and other common actions between resources.
         return resourceUid;
       },
 
-      onResponse: function(event) {
-        var method = event.currentTarget.method;
-        var response = event.detail.response;
-        if (response.length === undefined) {
-          response = [response];
-        }
-        var eventName = this.resource + this.eventsMethodsMap[method];
-        this.fire(eventName, response);
-      },
-
-      promise: function(ajax) {
-        return new Promise(function(resolve, reject) {
-          var req = ajax.go();
-          req.onload = function() {
-            // This is called even on 404 etc so check the status.
-            if (req.status == 200) {
-              // Resolve the promise with the response text.
-              resolve(req.response);
-            }
-            else {
-              // Otherwise reject with the status text which will hopefully be a meaningful error.
-              reject(Error(req.statusText));
-            }
-          };
-          // Handle network errors
-          req.onerror = function() {
-            reject(Error("Network Error"));
-          };
-        });
-      },
-
       get: function(resourceUri) {
         this.resourceUid = this.getResourceUid(resourceUri);
-        return this.promise(this.$.ajaxGET);
+        return this.$.ajaxGET.request();
       },
 
       filter: function(params) {
         this.params = params;
-        return this.promise(this.$.ajaxGET);
+        return this.$.ajaxGET.request();
       }
 
     });
