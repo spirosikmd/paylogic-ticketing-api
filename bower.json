@@ -5,6 +5,7 @@
   "main": "paylogic-ticketing-api.html",
   "dependencies": {
     "polymer": "Polymer/polymer#~0.3.3",
-    "core-ajax": "Polymer/core-ajax#~0.3.3"
+    "core-ajax": "Polymer/core-ajax#~0.3.3",
+    "ajax-promise": "~0.0.1"
   }
 }
