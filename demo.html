@@ -165,6 +165,20 @@
     </table>
   </div>
 
+  <div>
+    <h1>Info about basket quote</h1>
+    <template id="quote-template" repeat="{{quotes}}">
+      <dl>
+        <dt>Fee amount</dt>
+          <dd>{{fee.amount}}</dd>
+        <dt>Fee currency</dt>
+          <dd>{{fee.currency}}</dd>
+        <dt>Payment Method</dt>
+          <dd>{{paymentmethod}}</dd>
+      </template>
+    </ul>
+  </div>
+
   <script>
     (function() {
       'use-strict';
@@ -279,7 +293,7 @@
             console.log("Basket created: ", basket);
 
             // Create many tickets.
-            var productUri = "https://ticketapi.sandbox.paylogic.com/products/30df20dd0b0e4bc58f0663edc8a4f640";
+            var productUri = "https://ticketapi.sandbox.paylogic.com/products/46d6beabbf00474da49102887a210d5e";
 
             pta.tickets.create([{
               "basket": basket.uri,
@@ -320,6 +334,20 @@
           }, function(error) {
             console.error(error);
           });
+
+          // Get a quote for a basket.
+          var basketUri = "https://ticketapi.sandbox.paylogic.com/baskets/5660593ff3ec4653b35b797a44e90791";
+
+          pta.paymentmethods.quotes.get({
+            "basket": basketUri
+          }).then(function(response) {
+            document.querySelector('#quote-template').model = {
+              quotes: JSON.parse(response)
+            };
+          }, function(error) {
+            console.error(error);
+          });
+
         });
 
       });

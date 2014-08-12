@@ -14,10 +14,20 @@ Element which encapsulates the functionality for the PaymentMethod resource of t
 -->
 
 <link rel="import" href="../../polymer/polymer.html">
-<link rel="import" href="../../core-ajax/core-ajax.html">
+<link rel="import" href="quote-service.html">
 <link rel="import" href="resource-service.html">
 
 <polymer-element name="paymentmethod-service" extends="resource-service" hidden>
+
+  <template>
+
+    <quote-service
+      id="quotes-service"
+      resource="{{resource}}"
+      authToken="{{authToken}}"
+      baseUrl="{{baseUrl}}"></quote-service>
+
+  </template>
 
   <script>
 
@@ -32,16 +42,16 @@ Element which encapsulates the functionality for the PaymentMethod resource of t
        */
       resource: 'paymentmethods',
 
-      /**
-       * Gets the payment methods quotes for a basket.
-       *
-       * @method quotes
-       * @param {Object} params
-       *    @param {String} params.basket The uri of the basket to get the quotes for.
-       */
-      quotes: function(params) {
-        this.params = params;
-        this.$.ajaxGET.go();
+      ready: function() {
+        // Register the subresource 'quotes' as attribute.
+        for (nodeId in this.$) {
+          var split = nodeId.split('-');
+          var service = split[0];
+          var identifier = split[1];
+          if (identifier === 'service') {
+            this[service] = this.$[nodeId];
+          }
+        }
       }
 
     });

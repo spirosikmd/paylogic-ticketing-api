@@ -1,0 +1,58 @@
+<!--
+Element which is meant to be extended by the service elements. It provides the
+ajax functionality and other common actions between resources.
+
+@element resource-service
+@blurb Element which is meant to be extended by the service elements. It
+  provides the ajax functionality and other common actions between resources.
+@status alpha
+-->
+
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="ajax-promise.html">
+
+<polymer-element name="quote-service" attributes="resource baseUrl authToken" hidden>
+
+  <template>
+
+    <ajax-promise
+      id="ajaxGET"
+      method="GET"
+      url="{{baseUrl}}{{resource}}{{subresource}}"
+      params="{{params}}"
+      headers='{"Authorization": "Basic {{authToken}}"}'
+      contentType="application/json"
+      handleAs="json"></ajax-promise>
+
+  </template>
+
+  <script>
+
+    Polymer('quote-service', {
+
+      /**
+       * The type of the resource.
+       *
+       * @attribute resource
+       * @type string
+       * @default paymentmethods
+       */
+      subresource: '/quotes',
+
+      /**
+       * Gets the payment methods quotes for a basket.
+       *
+       * @method quotes
+       * @param {Object} params
+       *    @param {String} params.basket The uri of the basket to get the quotes for.
+       */
+      get: function(params) {
+        this.params = params;
+        return this.$.ajaxGET.request();
+      }
+
+    });
+
+  </script>
+
+</polymer-element>
