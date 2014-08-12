@@ -37,23 +37,28 @@ document.addEventListener('polymer-ready', function() {
   // Initialization of privates is completed.
   pta.addEventListener('init-ready', function() {
     // Use the event uri to get a specific event.
-    pta.events.get("<event_uri>");
+    pta.events.get("<event_uri>").then(function(response) {
+      var events = JSON.parse(response);
+      console.log(events);
+    }, function(error) {
+      console.error(error);
+    });
 
     // Or use the event uri in the filter method. This has the same result as the previous example.
-    pta.events.filter({"uri": "<event_uri>"});
+    pta.events.filter({"uri": "<event_uri>"}).then(function(response) {
+      var events = JSON.parse(response);
+      console.log(events);
+    }, function(error) {
+      console.error(error);
+    });;
 
     // Get the products for a specific event.
-    pta.products.filter({"event": "<event_uri>"});
-  });
-
-  // Event service has completed loading the event with the requested uri.
-  pta.addEventListener('events-loaded', function(e) {
-    console.log(e.detail);
-  });
-
-  // Product service has completed loading the products for the specified event.
-  pta.addEventListener('products-loaded', function(e) {
-    console.log(e.detail);
+    pta.products.filter({"event": "<event_uri>"}).then(function(response) {
+      var products = JSON.parse(response);
+      console.log(products);
+    }, function(error) {
+      console.error(error);
+    });;
   });
 });
 ```
