@@ -196,7 +196,7 @@
 
           pta.events.get(eventUri).then(function(response) {
             // Create the event object from the response.
-            var event = JSON.parse(response);
+            var event = response.response;
 
             document.querySelector('#event-template').model = {
               event: event
@@ -205,7 +205,7 @@
             // Use the event uri to get products for this specific event.
             pta.products.filter({"event": event.uri}).then(function(response) {
               document.querySelector('#products-template').model = {
-                products: JSON.parse(response)
+                products: response.response
               };
             }, function(error) {
               console.error(error);
@@ -218,7 +218,7 @@
           // Get a list of merchants.
           pta.merchants.get().then(function(response) {
             document.querySelector('#merchants-template').model = {
-              merchants: JSON.parse(response)
+              merchants: response.response
             };
           }, function(error) {
             console.error(error);
@@ -227,7 +227,7 @@
           // Get a list of profiles.
           pta.profiles.get().then(function(response) {
             document.querySelector('#profiles-template').model = {
-              profiles: JSON.parse(response)
+              profiles: response.response
             };
           }, function(error) {
             console.error(error);
@@ -243,7 +243,7 @@
             "last_name": "Legend"
           }).then(function(response) {
             document.querySelector('#created-profile-template').model = {
-              profile: JSON.parse(response)
+              profile: response.response
             };
           }, function(error) {
             console.error(error);
@@ -259,7 +259,7 @@
             }
           }).then(function(response) {
             document.querySelector('#updated-profile-template').model = {
-              profile: JSON.parse(response)
+              profile: response.response
             };
           }, function(error) {
             console.error(error);
@@ -268,7 +268,7 @@
           // Get a list of locations.
           pta.locations.get().then(function(response) {
             document.querySelector('#locations-template').model = {
-              locations: JSON.parse(response)
+              locations: response.response
             };
           }, function(error) {
             console.error(error);
@@ -277,7 +277,7 @@
           // Get a list of payment methods.
           pta.paymentmethods.get().then(function(response) {
             document.querySelector('#paymentmethods-template').model = {
-              paymentmethods: JSON.parse(response)
+              paymentmethods: response.response
             };
           }, function(error) {
             console.error(error);
@@ -289,7 +289,7 @@
           pta.baskets.create({
             profile: profileRevisionUri
           }).then(function(response) {
-            var basket = JSON.parse(response);
+            var basket = response.response;
             console.log("Basket created: ", basket);
 
             // Create many tickets.
@@ -302,7 +302,7 @@
               "basket": basket.uri,
               "product": productUri
             }]).then(function(response) {
-              var tickets = JSON.parse(response);
+              var tickets = response.response;
               console.log("Tickets created: ", tickets);
 
               // Create an order after tickets have been created.
@@ -312,7 +312,7 @@
                 basket: basket.uri,
                 paymentmethod: paymentmethodUri
               }).then(function(response) {
-                var order = JSON.parse(response);
+                var order = response.response;
                 console.log("Order created: ", order);
               }, function(error) {
                 console.error(error);
@@ -329,7 +329,7 @@
             profile: profileRevisionUri
           }).then(function(response) {
             document.querySelector('#baskets-template').model = {
-              baskets: JSON.parse(response)
+              baskets: response.response
             };
           }, function(error) {
             console.error(error);
@@ -342,7 +342,7 @@
             "basket": basketUri
           }).then(function(response) {
             document.querySelector('#quote-template').model = {
-              quotes: JSON.parse(response)
+              quotes: response.response
             };
           }, function(error) {
             console.error(error);
