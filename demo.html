@@ -192,7 +192,7 @@
         document.addEventListener('init-ready', function() {
 
           // Use the event uri to get a specific event.
-          var eventUri = "https://ticketapi.sandbox.paylogic.com/events/fb734881f55740a18bed05a06b43ad9c";
+          var eventUri = "https://ticketapi.sandbox.paylogic.com/events/b911513420bf4b739fffbd1c5b8703d3";
 
           pta.events.get(eventUri).then(function(response) {
             // Create the event object from the response.
@@ -202,16 +202,15 @@
               event: event
             };
 
+            return event;
+          }).then(function(event) {
             // Use the event uri to get products for this specific event.
             pta.products.filter({"event": event.uri}).then(function(response) {
               document.querySelector('#products-template').model = {
                 products: response.response
               };
-            }, function(error) {
-              console.error(error);
             });
-
-          }, function(error) {
+          }).catch(function(error) {
             console.error(error);
           });
 
@@ -293,7 +292,7 @@
             console.log("Basket created: ", basket);
 
             // Create many tickets.
-            var productUri = "https://ticketapi.sandbox.paylogic.com/products/46d6beabbf00474da49102887a210d5e";
+            var productUri = "https://ticketapi.sandbox.paylogic.com/products/0d74b76dc6e649a0ad3e2ca5b13d1799";
 
             pta.tickets.create([{
               "basket": basket.uri,
@@ -306,7 +305,7 @@
               console.log("Tickets created: ", tickets);
 
               // Create an order after tickets have been created.
-              var paymentmethodUri = "https://ticketapi.sandbox.paylogic.com/paymentmethods/d21d1ca055b6404085d81dce5977f954";
+              var paymentmethodUri = "https://ticketapi.sandbox.paylogic.com/paymentmethods/f9b8efb121814ce8bf6b13fd20e8d365";
 
               pta.orders.create({
                 basket: basket.uri,
