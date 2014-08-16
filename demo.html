@@ -194,7 +194,7 @@
           // Use the event uri to get a specific event.
           var eventUri = "https://ticketapi.sandbox.paylogic.com/events/b911513420bf4b739fffbd1c5b8703d3";
 
-          pta.events.get(eventUri).then(function(response) {
+          pta.event.get(eventUri).then(function(response) {
             // Create the event object from the response.
             var event = response.response;
 
@@ -205,7 +205,7 @@
             return event;
           }).then(function(event) {
             // Use the event uri to get products for this specific event.
-            pta.products.filter({"event": event.uri}).then(function(response) {
+            pta.product.filter({"event": event.uri}).then(function(response) {
               document.querySelector('#products-template').model = {
                 products: response.response
               };
@@ -215,7 +215,7 @@
           });
 
           // Get a list of merchants.
-          pta.merchants.get().then(function(response) {
+          pta.merchant.get().then(function(response) {
             document.querySelector('#merchants-template').model = {
               merchants: response.response
             };
@@ -224,7 +224,7 @@
           });
 
           // Get a list of profiles.
-          pta.profiles.get().then(function(response) {
+          pta.profile.get().then(function(response) {
             document.querySelector('#profiles-template').model = {
               profiles: response.response
             };
@@ -233,7 +233,7 @@
           });
 
           // Create a profile.
-          pta.profiles.create({
+          pta.profile.create({
             "country": "NL",
             "date_of_birth": "1976-06-04",
             "email": "marc@example.com",
@@ -251,7 +251,7 @@
           // Update a profile.
           var profileUri = "https://ticketapi.sandbox.paylogic.com/profiles/a2107be0765e480fa7c639775e4f9444";
 
-          pta.profiles.update({
+          pta.profile.update({
             profileUri: profileUri,
             data: {
               "email": "nick@example.com"
@@ -265,7 +265,7 @@
           });
 
           // Get a list of locations.
-          pta.locations.get().then(function(response) {
+          pta.location.get().then(function(response) {
             document.querySelector('#locations-template').model = {
               locations: response.response
             };
@@ -274,7 +274,7 @@
           });
 
           // Get a list of payment methods.
-          pta.paymentmethods.get().then(function(response) {
+          pta.paymentmethod.get().then(function(response) {
             document.querySelector('#paymentmethods-template').model = {
               paymentmethods: response.response
             };
@@ -285,7 +285,7 @@
           // Create a basket with a profile.
           var profileRevisionUri = "https://ticketapi.sandbox.paylogic.com/profiles/55e0681f784b42f08b97ad2c411cc8b5/revisions/f328e348c28347089078cdc285e9e4ce";
 
-          pta.baskets.create({
+          pta.basket.create({
             profile: profileRevisionUri
           }).then(function(response) {
             var basket = response.response;
@@ -294,7 +294,7 @@
             // Create many tickets.
             var productUri = "https://ticketapi.sandbox.paylogic.com/products/0d74b76dc6e649a0ad3e2ca5b13d1799";
 
-            pta.tickets.create([{
+            pta.ticket.create([{
               "basket": basket.uri,
               "product": productUri
             }, {
@@ -307,7 +307,7 @@
               // Create an order after tickets have been created.
               var paymentmethodUri = "https://ticketapi.sandbox.paylogic.com/paymentmethods/f9b8efb121814ce8bf6b13fd20e8d365";
 
-              pta.orders.create({
+              pta.order.create({
                 basket: basket.uri,
                 paymentmethod: paymentmethodUri
               }).then(function(response) {
@@ -324,7 +324,7 @@
           });
 
           // Filter baskets on profile.
-          pta.baskets.filter({
+          pta.basket.filter({
             profile: profileRevisionUri
           }).then(function(response) {
             document.querySelector('#baskets-template').model = {
@@ -337,7 +337,7 @@
           // Get a quote for a basket.
           var basketUri = "https://ticketapi.sandbox.paylogic.com/baskets/5660593ff3ec4653b35b797a44e90791";
 
-          pta.paymentmethods.quotes.get({
+          pta.paymentmethod.quotes.get({
             "basket": basketUri
           }).then(function(response) {
             document.querySelector('#quote-template').model = {

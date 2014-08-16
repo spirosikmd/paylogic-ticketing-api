@@ -33,51 +33,6 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
       handleAs="json"
       on-core-response="{{initPrivates}}"></core-ajax>
 
-    <event-service
-      id="events-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></event-service>
-
-    <product-service
-      id="products-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></product-service>
-
-    <location-service
-      id="locations-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></location-service>
-
-    <merchant-service
-      id="merchants-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></merchant-service>
-
-    <profile-service
-      id="profiles-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></profile-service>
-
-    <basket-service
-      id="baskets-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></basket-service>
-
-    <order-service
-      id="orders-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></order-service>
-
-    <paymentmethod-service
-      id="paymentmethods-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></paymentmethod-service>
-
-    <ticket-service
-      id="tickets-service"
-      authToken="{{authToken}}"
-      baseUrl="{{baseUrl}}"></ticket-service>
-
     <content></content>
 
   </template>
@@ -92,22 +47,48 @@ Element which encapsulates the functionality provided by the Paylogic Ticketing 
        * @event init-ready
        */
 
-      ready: function() {
-        for (nodeId in this.$) {
-          var split = nodeId.split('-');
-          var service = split[0];
-          var identifier = split[1];
-          if (identifier === 'service') {
-            this[service] = this.$[nodeId];
-          }
+      /**
+       * The services of the paylogic ticketing api.
+       *
+       * To be used to create the actual service polymer elements programmatically.
+       *
+       * @property services
+       * @type Array
+       * @default 'event', 'product', 'location', 'merchant', 'profile', 'basket', 'order', 'paymentmethod', 'ticket'
+       */
+      services: [
+        'event', 'product', 'location', 'merchant', 'profile', 'basket', 'order', 'paymentmethod', 'ticket'
+      ],
+
+      /**
+       * Creates the actual service polymer elements.
+       *
+       * @method createServices
+       */
+      createServices: function() {
+        for (var serviceIndex in this.services) {
+          var service = this.services[serviceIndex];
+          var serviceElementName = service + '-service';
+          var serviceElement = document.createElement(serviceElementName);
+          serviceElement.authToken = this.authToken;
+          serviceElement.baseUrl = this.baseUrl;
+          this[service] = serviceElement;
         }
       },
 
+      /**
+       * Initializes the privates from a json file and calls createServices.
+       *
+       * The file should not be public.
+       *
+       * @method initPrivates
+       */
       initPrivates: function(event) {
         this.appId = event.detail.response.appId;
         this.appSecret = event.detail.response.appSecret;
         this.authToken = btoa(this.appId + ':' + this.appSecret);
         this.baseUrl = event.detail.response.baseUrl;
+        this.createServices();
         this.fire('init-ready');
       }
 
