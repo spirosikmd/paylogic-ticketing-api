@@ -77,8 +77,8 @@
           <dd>{{gender}}</dd>
         <dt>Date of birth</dt>
           <dd>{{date_of_birth}}</dd>
-      </template>
-    </ul>
+      </dl>
+    </template>
   </div>
 
   <div>
@@ -97,8 +97,8 @@
           <dd>{{gender}}</dd>
         <dt>Date of birth</dt>
           <dd>{{date_of_birth}}</dd>
-      </template>
-    </ul>
+      </dl>
+    </template>
   </div>
 
   <div>
@@ -175,8 +175,8 @@
           <dd>{{fee.currency}}</dd>
         <dt>Payment Method</dt>
           <dd>{{paymentmethod}}</dd>
-      </template>
-    </ul>
+      </dl>
+    </template>
   </div>
 
   <script>
@@ -186,16 +186,15 @@
       document.addEventListener('polymer-ready', function() {
 
         var pta = document.querySelector('paylogic-ticketing-api');
-        var basketUri = "";
 
         // Initialization of privates is completed.
         document.addEventListener('init-ready', function() {
 
           // Use the event uri to get a specific event.
-          var eventUri = "https://ticketapi.sandbox.paylogic.com/events/b911513420bf4b739fffbd1c5b8703d3";
+          var eventUri = "https://ticketapi.sandbox.paylogic.com/events/c89f8211bfb24b9483d2c2c58fc85c74";
 
           pta.event.get(eventUri).then(function(response) {
-            // Create the event object from the response.
+
             var event = response.response;
 
             document.querySelector('#event-template').model = {
@@ -203,148 +202,206 @@
             };
 
             return event;
+
           }).then(function(event) {
+
             // Use the event uri to get products for this specific event.
             pta.product.filter({"event": event.uri}).then(function(response) {
+
               document.querySelector('#products-template').model = {
                 products: response.response
               };
+
+              // Use the first product to buy tickets for.
+              var product = response.response[0];
+
+              // Create a profile.
+              pta.profile.create({
+                "country": "NL",
+                "date_of_birth": "1976-06-04",
+                "email": "marc@example.com",
+                "first_name": "Marc",
+                "gender": 1,
+                "last_name": "Legend"
+              }).then(function(response) {
+
+                var profile = response.response;
+
+                document.querySelector('#created-profile-template').model = {
+                  profile: profile
+                };
+
+                // Update a profile.
+                pta.profile.update({
+                  profileUri: profile.uri,
+                  data: {
+                    "email": "nick@example.com",
+                    "first_name": "Nick"
+                  }
+                }).then(function(response) {
+
+                  var profile = response.response;
+
+                  document.querySelector('#updated-profile-template').model = {
+                    profile: profile
+                  };
+
+                  // Create a basket with a profile.
+                  pta.basket.create({
+                    profile: profile.uri
+                  }).then(function(response) {
+
+                    // Filter baskets on profile.
+                    pta.basket.filter({
+                      profile: profile.uri
+                    }).then(function(response) {
+
+                      document.querySelector('#baskets-template').model = {
+                        baskets: response.response
+                      };
+
+                    }, function(error) {
+
+                      console.error("Error filtering baskets on profile.", error);
+
+                    });
+
+                    var basket = response.response;
+
+                    console.log("Basket created: ", basket);
+
+                    // Create tickets using the selected product.
+                    pta.ticket.create([{
+                      "basket": basket.uri,
+                      "product": product.uri
+                    }, {
+                      "basket": basket.uri,
+                      "product": product.uri
+                    }]).then(function(response) {
+
+                      var tickets = response.response;
+
+                      console.log("Tickets created: ", tickets);
+
+                      // Get the quotes for this basket.
+                      pta.paymentmethod.quotes.get({
+                        "basket": basket.uri
+                      }).then(function(response) {
+
+                        document.querySelector('#quote-template').model = {
+                          quotes: response.response
+                        };
+
+                        var quote = response.response[0];
+
+                        // Create an order.
+                        pta.order.create({
+                          basket: basket.uri,
+                          paymentmethod: quote.paymentmethod
+                        }).then(function(response) {
+
+                          var order = response.response;
+
+                          console.log("Order created: ", order);
+
+                        }, function(error) {
+
+                          console.error("Error creating order.", error);
+
+                        });
+
+                      }, function(error) {
+
+                        console.error("Error getting quotes for basket.", error);
+
+                      });
+
+                    }, function(error) {
+
+                      console.error("Error creating tickets.", error);
+
+                    });
+
+                  }, function(error) {
+
+                    console.error("Error creating basket.", error);
+
+                  });
+
+                }, function(error) {
+
+                  console.error("Error updating profile.", error);
+
+                });
+
+              }, function(error) {
+
+                console.error("Error creating profile.", error);
+
+              });
+
+            }, function(error) {
+
+              console.log("Error filtering products.", error);
+
             });
+
           }).catch(function(error) {
-            console.error(error);
+
+            console.error("Error creating an event.", error);
+
           });
 
           // Get a list of merchants.
           pta.merchant.get().then(function(response) {
+
             document.querySelector('#merchants-template').model = {
               merchants: response.response
             };
+
           }, function(error) {
-            console.error(error);
+
+            console.error("Error retrieving merchants.", error);
+
           });
 
           // Get a list of profiles.
           pta.profile.get().then(function(response) {
+
             document.querySelector('#profiles-template').model = {
               profiles: response.response
             };
-          }, function(error) {
-            console.error(error);
-          });
 
-          // Create a profile.
-          pta.profile.create({
-            "country": "NL",
-            "date_of_birth": "1976-06-04",
-            "email": "marc@example.com",
-            "first_name": "Marc",
-            "gender": 1,
-            "last_name": "Legend"
-          }).then(function(response) {
-            document.querySelector('#created-profile-template').model = {
-              profile: response.response
-            };
           }, function(error) {
-            console.error(error);
-          });
 
-          // Update a profile.
-          var profileUri = "https://ticketapi.sandbox.paylogic.com/profiles/a2107be0765e480fa7c639775e4f9444";
+            console.error("Error retrieving profiles.", error);
 
-          pta.profile.update({
-            profileUri: profileUri,
-            data: {
-              "email": "nick@example.com"
-            }
-          }).then(function(response) {
-            document.querySelector('#updated-profile-template').model = {
-              profile: response.response
-            };
-          }, function(error) {
-            console.error(error);
           });
 
           // Get a list of locations.
           pta.location.get().then(function(response) {
+
             document.querySelector('#locations-template').model = {
               locations: response.response
             };
+
           }, function(error) {
-            console.error(error);
+
+            console.error("Error retrieving locations.", error);
+
           });
 
           // Get a list of payment methods.
           pta.paymentmethod.get().then(function(response) {
+
             document.querySelector('#paymentmethods-template').model = {
               paymentmethods: response.response
             };
+
           }, function(error) {
-            console.error(error);
-          });
 
-          // Create a basket with a profile.
-          var profileRevisionUri = "https://ticketapi.sandbox.paylogic.com/profiles/55e0681f784b42f08b97ad2c411cc8b5/revisions/f328e348c28347089078cdc285e9e4ce";
+            console.error("Error retrieving payment methods.", error);
 
-          pta.basket.create({
-            profile: profileRevisionUri
-          }).then(function(response) {
-            var basket = response.response;
-            console.log("Basket created: ", basket);
-
-            // Create many tickets.
-            var productUri = "https://ticketapi.sandbox.paylogic.com/products/0d74b76dc6e649a0ad3e2ca5b13d1799";
-
-            pta.ticket.create([{
-              "basket": basket.uri,
-              "product": productUri
-            }, {
-              "basket": basket.uri,
-              "product": productUri
-            }]).then(function(response) {
-              var tickets = response.response;
-              console.log("Tickets created: ", tickets);
-
-              // Create an order after tickets have been created.
-              var paymentmethodUri = "https://ticketapi.sandbox.paylogic.com/paymentmethods/f9b8efb121814ce8bf6b13fd20e8d365";
-
-              pta.order.create({
-                basket: basket.uri,
-                paymentmethod: paymentmethodUri
-              }).then(function(response) {
-                var order = response.response;
-                console.log("Order created: ", order);
-              }, function(error) {
-                console.error(error);
-              });
-            }, function(error) {
-              console.error(error);
-            });
-          }, function(error) {
-            console.error(error);
-          });
-
-          // Filter baskets on profile.
-          pta.basket.filter({
-            profile: profileRevisionUri
-          }).then(function(response) {
-            document.querySelector('#baskets-template').model = {
-              baskets: response.response
-            };
-          }, function(error) {
-            console.error(error);
-          });
-
-          // Get a quote for a basket.
-          var basketUri = "https://ticketapi.sandbox.paylogic.com/baskets/5660593ff3ec4653b35b797a44e90791";
-
-          pta.paymentmethod.quotes.get({
-            "basket": basketUri
-          }).then(function(response) {
-            document.querySelector('#quote-template').model = {
-              quotes: response.response
-            };
-          }, function(error) {
-            console.error(error);
           });
 
         });

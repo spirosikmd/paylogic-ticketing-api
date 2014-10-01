@@ -1,5 +1,5 @@
 paylogic-ticketing-api
-================
+======================
 
 A polymer element which encapsulates the functionality provided by the
 [Paylogic Ticketing API.](https://doc.sandbox.paylogic.com/)
@@ -12,7 +12,7 @@ We only need to run
 bower install
 ```
 
-to install all the dependecies.
+to install all the dependencies.
 
 ## Getting Started
 
@@ -50,7 +50,7 @@ document.addEventListener('polymer-ready', function() {
       console.log(events);
     }, function(error) {
       console.error(error);
-    });;
+    });
 
     // Get the products for a specific event.
     pta.product.filter({"event": "<event_uri>"}).then(function(response) {
@@ -58,7 +58,7 @@ document.addEventListener('polymer-ready', function() {
       console.log(products);
     }, function(error) {
       console.error(error);
-    });;
+    });
   });
 });
 ```

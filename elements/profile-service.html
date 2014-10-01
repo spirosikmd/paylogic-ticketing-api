@@ -39,7 +39,7 @@ Element which encapsulates the functionality for the Profile resource of the Pay
       },
 
       update: function(params) {
-        this.resourceUid = this.getResourceUid(params.profileUri)
+        this.resourceUid = this.getResourceUid(params.profileUri);
         this.$.ajaxPUT.xhrArgs = {
           body: JSON.stringify(params.data)
         };
